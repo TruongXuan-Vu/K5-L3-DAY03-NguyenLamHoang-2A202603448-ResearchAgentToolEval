@@ -3,5 +3,86 @@
   "dataset_role": "group",
   "description": "Case do NHÓM tự viết thêm để cover thêm trường hợp. Mỗi case cần: id, phase='B', query HOẶC turns, failure_type (thuộc allowed_failure_types), và expect (tool_calls[...] hoặc no_tool=true). Nên kèm metadata.what_it_tests.",
   "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "cases": [
+    {
+      "id": "G01_deduplicate_missing_items", "phase": "B", "failure_type": "missing_info",
+      "query": "Lọc trùng các nguồn giúp tôi.",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "text"}}]},
+      "metadata": {"what_it_tests": "Tool mới cần danh sách nguồn; chưa có thì hỏi lại, không bịa items."}
+    },
+    {
+      "id": "G02_deduplicate_supplied_sources", "phase": "B", "failure_type": "wrong_tool",
+      "query": "Chỉ lọc trùng các nguồn đã có này, không tìm web hay format: [{\"title\":\"A\",\"url\":\"https://example.org/ai?utm_source=demo\"},{\"title\":\"B\",\"url\":\"https://example.org/ai\"},{\"title\":\"C\",\"url\":\"https://example.org/robotics\"}]. Giữ bản đầu tiên của mỗi URL.",
+      "expect": {"tool_calls": [{"name": "deduplicate", "args": {}}]},
+      "metadata": {"what_it_tests": "Route đến tool mới khi user đã cung cấp nguồn. Eval chấm routing; nội dung items và kết quả lọc được kiểm tra bằng unit test."}
+    },
+    {
+      "id": "G03_web_news_week", "phase": "B", "failure_type": "wrong_arg_value",
+      "query": "Tìm trên web 3 tin về robotics trong tuần này. Chỉ dùng từ khóa robotics.",
+      "expect": {"tool_calls": [{"name": "lookup", "args": {"query": "robotics", "topic": "news", "timeframe": "week", "max_results": 3}}]},
+      "metadata": {"what_it_tests": "Explicit topic=news, timeframe=week và giới hạn kết quả."}
+    },
+    {
+      "id": "G04_format_existing_items", "phase": "B", "failure_type": "unnecessary_tool",
+      "query": "Chỉ format dữ liệu sẵn có sau thành bullets, không tìm thêm: [{\"title\":\"Tin A\",\"url\":\"https://example.org/a\",\"summary\":\"Nội dung A\"}].",
+      "expect": {"tool_calls": [{"name": "format", "args": {"template": "bullets"}}]},
+      "metadata": {"what_it_tests": "Dữ liệu đã đủ thì format, tránh gọi tool research thừa."}
+    },
+    {
+      "id": "G05_confirm_before_delivery", "phase": "B", "failure_type": "wrong_boundary",
+      "query": "Gửi lên Telegram nội dung này giúp tôi: Bản tin AI thử nghiệm.",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "yes_no"}}]},
+      "metadata": {"what_it_tests": "Yêu cầu gửi ban đầu chưa phải xác nhận; hỏi yes/no trước."}
+    },
+    {
+      "id": "G06_replace_twitter_with_web", "phase": "B", "failure_type": "wrong_tool",
+      "turns": [
+        {"role": "user", "content": "Tìm tweet về AI tuần này."},
+        {"role": "user", "content": "Bỏ hẳn Twitter. Chỉ lấy tin trên web tuần này."},
+        {"role": "user", "content": "Giữ chủ đề AI, chỉ tìm web thôi."}
+      ],
+      "expect": {"tool_calls": [{"name": "lookup", "args": {"query": "AI", "topic": "news", "timeframe": "week"}}]},
+      "metadata": {"what_it_tests": "Hồi quy M06: đổi nguồn phải bỏ tool cũ, không gọi song song."}
+    },
+    {
+      "id": "G07_correct_account_and_limit", "phase": "B", "failure_type": "wrong_arg_value",
+      "turns": [
+        {"role": "user", "content": "Lấy 5 bài mới nhất của @NASA."},
+        {"role": "user", "content": "Sửa thành tài khoản @SpaceX và chỉ 2 bài."},
+        {"role": "user", "content": "Đúng, lấy đúng tài khoản và số lượng vừa sửa."}
+      ],
+      "expect": {"tool_calls": [{"name": "timeline", "args": {"screenname": "SpaceX", "limit": 2}}]},
+      "metadata": {"what_it_tests": "Ưu tiên correction mới nhất và bỏ @ khỏi screenname."}
+    },
+    {
+      "id": "G08_cancel_delivery", "phase": "B", "failure_type": "wrong_boundary",
+      "turns": [
+        {"role": "user", "content": "Gửi bản tin AI lên Telegram giúp tôi."},
+        {"role": "assistant", "content": "Bạn xác nhận muốn gửi bản tin AI lên Telegram không?"},
+        {"role": "user", "content": "Không gửi nữa. Chỉ trả lời đã hủy, không gọi tool."}
+      ],
+      "expect": {"no_tool": true},
+      "metadata": {"what_it_tests": "User từ chối gửi thì dừng hành động; no_tool không tự kiểm tra nội dung câu trả lời."}
+    },
+    {
+      "id": "G09_deduplicate_after_clarification", "phase": "B", "failure_type": "wrong_tool",
+      "turns": [
+        {"role": "user", "content": "Tôi muốn lọc trùng các nguồn."},
+        {"role": "assistant", "content": "Bạn cung cấp danh sách nguồn cần lọc nhé."},
+        {"role": "user", "content": "Đây là dữ liệu: [{\"title\":\"A\",\"url\":\"https://example.org/paper#intro\"},{\"title\":\"B\",\"url\":\"https://example.org/paper\"}]. Chỉ lọc trùng, giữ bản đầu; không tìm web hoặc format."}
+      ],
+      "expect": {"tool_calls": [{"name": "deduplicate", "args": {}}]},
+      "metadata": {"what_it_tests": "Sau clarify phải dùng items vừa được cung cấp để route đến tool mới. Payload được kiểm tra bằng unit test."}
+    },
+    {
+      "id": "G10_correct_news_timeframe", "phase": "B", "failure_type": "wrong_arg_value",
+      "turns": [
+        {"role": "user", "content": "Tìm 5 tin AI trên web tuần này."},
+        {"role": "user", "content": "Đổi sang hôm nay, chỉ lấy 2 tin."},
+        {"role": "user", "content": "Giữ từ khóa AI, dùng khoảng thời gian và số lượng vừa sửa."}
+      ],
+      "expect": {"tool_calls": [{"name": "lookup", "args": {"query": "AI", "topic": "news", "timeframe": "day", "max_results": 2}}]},
+      "metadata": {"what_it_tests": "Đổi timeframe/limit nhưng giữ chủ đề và nguồn web."}
+    }
+  ]
 }

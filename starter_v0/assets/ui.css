@@ -1,0 +1,37 @@
+.stApp { background: #f6f8fb; }
+.block-container { max-width: 1080px; padding: 2.4rem 2.6rem 5rem; }
+header[data-testid="stHeader"] { background: transparent; }
+[data-testid="stSidebar"] { background: #fff; border-right: 1px solid #e5eaf2; }
+[data-testid="stSidebar"] .block-container { padding-top: 1.6rem; }
+[data-testid="stSidebar"] h1 { font-size: 1.4rem; }
+.brand { display: flex; gap: 12px; align-items: center; margin-bottom: 36px; }
+.brand-mark { width: 42px; height: 42px; border-radius: 13px; background: #172c4a; color: #bdf77a;
+  display: grid; place-items: center; font-size: 25px; font-weight: 700; }
+.brand-name { color: #172c4a; font-size: 20px; font-weight: 750; letter-spacing: -.6px; }
+.brand-note { font-size: 10px; font-weight: 650; letter-spacing: 2px; color: #8492a6; }
+.eyebrow { color: #6f7d90; font-size: 11px; font-weight: 700; letter-spacing: 2px; margin-bottom: 13px; }
+.hero { margin: 18px 0 27px; }
+.hero h1 { color: #172c4a; font-size: clamp(32px, 4.2vw, 49px); font-weight: 750;
+  line-height: 1.2; letter-spacing: -1.7px; padding: 0 0 16px; }
+.hero h1 span { color: #3c76df; }
+.hero p { color: #748197; font-size: 16px; line-height: 1.7; max-width: 630px; }
+.workspace-badge { display: inline-block; background: #eaf0fa; color: #47638d; border: 1px solid #dae4f4;
+  font-size: 10px; letter-spacing: 1.3px; border-radius: 20px; padding: 6px 12px; font-weight: 700; }
+.version-note { padding: 13px 14px; background: #f4f7fc; border-radius: 11px;
+  color: #6a7b94; font-size: 12px; line-height: 1.65; margin: 8px 0 20px; }
+.section-label { color: #7d8ba1; font-size: 10px; font-weight: 700; letter-spacing: 1.8px; margin: 23px 0 12px; }
+.card-icon { display: inline-flex; background: #edf3ff; border-radius: 11px; padding: 9px 12px; margin-bottom: 11px; font-size: 22px; }
+.card-title { font-size: 17px; color: #243a59; font-weight: 700; margin: 2px 0 8px; }
+.card-description { color: #8190a6; font-size: 13px; line-height: 1.65; min-height: 66px; }
+[data-testid="stVerticalBlockBorderWrapper"] { border-radius: 15px; background: white; }
+.stButton > button { border-radius: 10px; font-weight: 600; min-height: 42px; }
+.stButton > button[kind="primary"] { background: #172c4a; border-color: #172c4a; color: #fff; }
+.stButton > button[kind="primary"]:hover { background: #244774; border-color: #244774; color: #fff; }
+[data-testid="stChatMessage"] { background: white; border: 1px solid #e7edf6; border-radius: 15px; padding: 20px; margin-bottom: 16px; }
+[data-testid="stBottom"] > div { background: #f6f8fb; }
+[data-testid="stChatInput"] { border-radius: 15px; border: 1px solid #dce5f2; box-shadow: 0 6px 28px #16375e0a; }
+[data-testid="stMetric"] { background: white; border: 1px solid #e7edf6; border-radius: 13px; padding: 13px 17px; }
+[data-testid="stMetricValue"] { font-size: 23px; color: #243a59; }
+[data-testid="stMetricLabel"] { color: #8492a6; }
+.footnote { color: #98a4b6; font-size: 12px; text-align: center; margin-top: 25px; }
+@media (max-width: 700px) { .block-container { padding: 1.3rem 1rem 4rem; } .hero h1 { letter-spacing: -.8px; } }

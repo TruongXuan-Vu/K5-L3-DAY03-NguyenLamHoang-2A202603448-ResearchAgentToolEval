@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import os
+from html import escape
 from pathlib import Path
 from uuid import uuid4
 
@@ -16,6 +17,17 @@ from versioning import artifact_version_dict, build_artifact_version
 ROOT = Path(__file__).resolve().parent
 PROMPT = ROOT / "artifacts/system_prompt.md"
 TOOLS = ROOT / "artifacts/tools.yaml"
+VERSION_NOTES = {
+    "v0": "Baseline starter. Có chỉ dẫn tự đoán khi thiếu thông tin và gửi ngay.",
+    "v1": "Hỏi lại khi thiếu tài khoản hoặc URL, thay vì tự đoán.",
+    "v2": "Giữ cải tiến v1 và hỏi xác nhận trước khi gửi Telegram.",
+    "v3": "Làm rõ lookup: nguồn web, tin tức và ngữ cảnh qua nhiều lượt.",
+    "v4-tools": "Bổ sung deduplicate để lọc nguồn trùng URL. Bản demo hiện tại.",
+    "working": "Nạp trực tiếp các file prompt/tools đang sửa trong dự án.",
+}
+VERSION_LABELS = {"v0": "v0 · Baseline", "v1": "v1 · Hỏi lại khi thiếu dữ liệu",
+                  "v2": "v2 · Xác nhận trước khi gửi", "v3": "v3 · Tìm đúng nguồn web",
+                  "v4-tools": "v4-tools · Thêm lọc nguồn trùng", "working": "Bản đang sửa"}
 PROVIDERS = {
     "openrouter": ("OPENROUTER_API_KEY", "openai/gpt-4o-mini"),
     "openai": ("OPENAI_API_KEY", "gpt-4o-mini"),
@@ -26,8 +38,28 @@ PROVIDERS = {
 EXAMPLES = [
     "Tìm 5 tin về AI hôm nay trên web, kèm liên kết nguồn.",
     "Tóm tắt 5 tweet mới nhất giúp mình.",
-    "Tìm 3 bài báo trên arXiv về retrieval augmented generation.",
+    'Lọc trùng hai nguồn này, giữ nguồn đầu tiên: [{"title":"AI report","url":"https://example.org/ai?utm_source=demo"},{"title":"Bản trùng","url":"https://example.org/ai"}].',
 ]
+
+
+def version_options() -> list[str]:
+    return [version for version in VERSION_NOTES if version == "working" or
+            all((ROOT / "artifacts/snapshots" / version / name).is_file()
+                for name in ["system_prompt.md", "tools.yaml"])]
+
+
+def artifact_paths(version: str) -> tuple[Path, Path]:
+    if version not in version_options():
+        raise ValueError("Unknown or incomplete version snapshot")
+    if version == "working":
+        return PROMPT, TOOLS
+    directory = ROOT / "artifacts/snapshots" / version
+    return directory / "system_prompt.md", directory / "tools.yaml"
+
+
+def reset_conversation() -> None:
+    for key in ["conversation", "suggested_prompt", "save_error"]:
+        st.session_state.pop(key, None)
 
 
 def current_version() -> str:
@@ -46,7 +78,8 @@ def current_version() -> str:
 
 def new_conversation(provider_name: str, model: str, version: str, rounds: int) -> dict:
     provider = make_provider(provider_name)
-    artifact = build_artifact_version(version, PROMPT, TOOLS)
+    prompt_path, tools_path = artifact_paths(version)
+    artifact = build_artifact_version(version, prompt_path, tools_path)
     transcript_id = f"{artifact.version}_ui_{uuid4().hex}"
     # A UUID filename keeps the user-editable version label out of filesystem paths.
     path = ROOT / "transcripts" / f"ui_{uuid4().hex}.transcript.json"
@@ -56,8 +89,8 @@ def new_conversation(provider_name: str, model: str, version: str, rounds: int) 
         "source": "streamlit",
         "provider": provider_name,
         "model": model or getattr(provider, "default_model", None),
-        "system_prompt": str(PROMPT),
-        "tools": str(TOOLS),
+        "system_prompt": str(prompt_path),
+        "tools": str(tools_path),
         "history_window": 8,
         "max_tool_rounds": rounds,
         "created_at": now_iso(),
@@ -67,8 +100,9 @@ def new_conversation(provider_name: str, model: str, version: str, rounds: int) 
     return {
         "provider": provider,
         "model": model or None,
-        "prompt": PROMPT.read_text(encoding="utf-8"),
-        "tools": to_openai_tools(load_tool_declarations(TOOLS)),
+        "prompt": prompt_path.read_text(encoding="utf-8"),
+        "tools": to_openai_tools(load_tool_declarations(tools_path)),
+        "snapshot_selection": version,
         "history": [],
         "path": path,
         "transcript": transcript,
@@ -78,7 +112,7 @@ def new_conversation(provider_name: str, model: str, version: str, rounds: int) 
 def render_turn(turn: dict) -> None:
     with st.chat_message("user"):
         st.markdown(turn["user"])
-    with st.chat_message("assistant"):
+    with st.chat_message("assistant", avatar="🔎"):
         if turn["status"] == "provider_error":
             st.error(turn["assistant_text"])
         else:
@@ -99,23 +133,33 @@ def main() -> None:
     st.set_page_config(page_title="Research Agent", page_icon="🔎", layout="centered")
     if st.session_state.get("save_error"):
         st.warning("Chưa lưu được transcript trên máy. Bạn vẫn có thể tải JSON từ thanh bên.")
-    st.markdown("<style>.block-container{max-width:960px;padding-top:2rem}"
-                "[data-testid=stSidebar]{border-right:1px solid #dce3ed}"
-                "</style>", unsafe_allow_html=True)
+    st.markdown(f"<style>{(ROOT / 'assets/ui.css').read_text(encoding='utf-8')}</style>", unsafe_allow_html=True)
     conversation = st.session_state.get("conversation")
+    if conversation and "snapshot_selection" not in conversation:
+        reset_conversation()
+        conversation = None
     active = conversation is not None
+    options = version_options()
+    if st.session_state.get("artifact_choice") not in options:
+        detected = current_version()
+        st.session_state["artifact_choice"] = detected if detected in options else "working"
 
     with st.sidebar:
-        st.title("🔎 Research Agent")
-        st.caption("Tìm nguồn · Đọc sâu · Tổng hợp")
-        provider_name = st.selectbox("Provider", list(PROVIDERS), disabled=active, key="provider")
-        model = st.text_input("Model (để trống dùng mặc định)", disabled=active, key="model",
-                              placeholder=PROVIDERS[provider_name][1] or "Model mặc định của provider")
-        version = st.text_input("Nhãn phiên bản", value=current_version(), disabled=active, key="version")
-        rounds = st.slider("Số vòng tool tối đa mỗi lượt", 1, 8, 4, disabled=active, key="rounds")
-        if st.button("＋ Cuộc trò chuyện mới", use_container_width=True):
-            st.session_state.pop("conversation", None)
+        st.markdown('<div class="brand"><div class="brand-mark">⌕</div><div><div class="brand-name">Research Agent</div><div class="brand-note">YOUR RESEARCH WORKSPACE</div></div></div>', unsafe_allow_html=True)
+        if st.button("＋ Cuộc trò chuyện mới", type="primary", use_container_width=True):
+            reset_conversation()
             st.rerun()
+        st.markdown('<div class="section-label">KHÔNG GIAN LÀM VIỆC</div>', unsafe_allow_html=True)
+        version = st.selectbox("Phiên bản agent", options, key="artifact_choice",
+                               format_func=lambda value: VERSION_LABELS.get(value, value),
+                               on_change=reset_conversation)
+        st.markdown(f'<div class="version-note">{escape(VERSION_NOTES[version])}</div>', unsafe_allow_html=True)
+        st.caption("Đổi phiên bản sẽ bắt đầu hội thoại mới. Transcript cũ vẫn được giữ.")
+        with st.expander("Cấu hình nâng cao"):
+            provider_name = st.selectbox("Provider", list(PROVIDERS), disabled=active, key="provider")
+            model = st.text_input("Model (để trống dùng mặc định)", disabled=active, key="model",
+                                  placeholder=PROVIDERS[provider_name][1] or "Model mặc định của provider")
+            rounds = st.slider("Số vòng tool tối đa mỗi lượt", 1, 8, 4, disabled=active, key="rounds")
 
         with st.expander("Kết nối dịch vụ"):
             key_name, _ = PROVIDERS[provider_name]
@@ -146,13 +190,30 @@ def main() -> None:
                     use_container_width=True,
                 )
 
-    st.title("Bạn muốn tìm hiểu điều gì?")
-    st.write("Tìm tin, đọc tài liệu và tổng hợp thông tin cùng nguồn tham khảo.")
+    st.markdown('<span class="workspace-badge">RESEARCH WORKSPACE · LOCAL</span>', unsafe_allow_html=True)
+    if active:
+        st.markdown('<div class="hero"><div class="eyebrow">CUỘC TRÒ CHUYỆN CỦA BẠN</div><h1>Cùng đọc <span>sâu hơn.</span></h1></div>', unsafe_allow_html=True)
+    else:
+        st.markdown('<div class="hero"><div class="eyebrow">TÒ MÒ LÀ ĐIỂM KHỞI ĐẦU</div><h1>Từ câu hỏi đến<br><span>thông tin có nguồn.</span></h1><p>Tìm tin mới, đọc sâu tài liệu và kết nối thông tin.<br>Một không gian gọn gàng cho những điều bạn muốn hiểu rõ.</p></div>', unsafe_allow_html=True)
+        _, selected_tools = artifact_paths(version)
+        columns = st.columns(3)
+        columns[0].metric("Phiên bản đang chọn", version)
+        columns[1].metric("Công cụ sẵn có", len(load_tool_declarations(selected_tools)))
+        columns[2].metric("Bằng chứng hội thoại", "JSON")
     if not conversation:
-        st.caption("Bắt đầu bằng một câu hỏi mẫu hoặc nhập yêu cầu của bạn.")
-        for example in EXAMPLES:
-            if st.button(example, use_container_width=True):
-                st.session_state["suggested_prompt"] = example
+        st.markdown('<div class="section-label">BẮT ĐẦU TỪ MỘT Ý TƯỞNG</div>', unsafe_allow_html=True)
+        cards = [("🌐", "Theo dõi tin mới", "Khám phá những tin AI đáng chú ý hôm nay, kèm nguồn để đọc thêm.", "Tìm tin AI", EXAMPLES[0]),
+                 ("💬", "Đọc dòng thảo luận", "Tìm hiểu các bài đăng mới nhất. Agent sẽ hỏi nếu bạn chưa chọn tài khoản.", "Thử hỏi lại", EXAMPLES[1])]
+        if version in {"v4-tools", "working"}:
+            cards.append(("🧩", "Giữ nguồn, bỏ trùng", "Làm gọn danh sách nguồn trước khi tổng hợp bản tin.", "Lọc nguồn trùng", EXAMPLES[2]))
+        else:
+            cards.append(("📄", "Đọc sâu tài liệu", "Tìm nghiên cứu trên arXiv để mở rộng góc nhìn về một chủ đề.", "Tìm nghiên cứu", "Tìm 3 bài báo trên arXiv về retrieval augmented generation."))
+        for column, (icon, title, description, label, example) in zip(st.columns(3), cards):
+            with column, st.container(border=True):
+                st.markdown(f'<div class="card-icon">{icon}</div><div class="card-title">{title}</div><div class="card-description">{description}</div>', unsafe_allow_html=True)
+                if st.button(label + " →", key="example_" + title, use_container_width=True):
+                    st.session_state["suggested_prompt"] = example
+        st.markdown('<div class="footnote">Câu trả lời tốt bắt đầu bằng nguồn rõ ràng. Luôn kiểm tra thông tin trước khi sử dụng.</div>', unsafe_allow_html=True)
 
     if conversation:
         for turn in conversation["transcript"]["turns"]:

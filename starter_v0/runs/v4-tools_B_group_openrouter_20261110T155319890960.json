@@ -1,0 +1,793 @@
+{
+  "run_id": "v4-tools_B_group_openrouter_20261110T155319890960",
+  "version": "v4-tools",
+  "artifact_version": "v4-tools+p9e8941334829+tb80288844c1c",
+  "prompt_hash": "9e89413348295b0307fa137106171afdd94bc9cdae7f5a4fa0413241dcb29acd",
+  "tools_hash": "b80288844c1c6644ddbe6e0b1f479b15499c0b47600aa3b398083e8121187261",
+  "phase": "B",
+  "suite": "group",
+  "provider": "openrouter",
+  "model": "openai/gpt-4o-mini",
+  "system_prompt": "C:\\Users\\Hoang\\K5-L3-DAY03-NguyenLamHoang-2A202603448-ResearchAgentToolEval\\starter_v0\\artifacts\\system_prompt.md",
+  "tools": "C:\\Users\\Hoang\\K5-L3-DAY03-NguyenLamHoang-2A202603448-ResearchAgentToolEval\\starter_v0\\artifacts\\tools.yaml",
+  "eval_cases": "C:\\Users\\Hoang\\K5-L3-DAY03-NguyenLamHoang-2A202603448-ResearchAgentToolEval\\starter_v0\\data\\eval_group.json",
+  "dataset_id": "day04_v2_research_group",
+  "dataset_role": "group",
+  "description": "Case do NHÓM tự viết thêm để cover thêm trường hợp. Mỗi case cần: id, phase='B', query HOẶC turns, failure_type (thuộc allowed_failure_types), và expect (tool_calls[...] hoặc no_tool=true). Nên kèm metadata.what_it_tests.",
+  "generated_at": "2026-11-10T15:53:19",
+  "summary": {
+    "total_cases": 10,
+    "measured_cases": 10,
+    "provider_error_cases": 0,
+    "passed_cases": 8,
+    "case_accuracy": 0.8,
+    "tool_routing_accuracy": 1.0,
+    "argument_accuracy": 0.8,
+    "multiturn_accuracy": 0.8,
+    "failure_counts": {
+      "missing_info": 1,
+      "wrong_tool": 1
+    },
+    "observed_mismatch_counts": {
+      "wrong_arg_value": 2
+    }
+  },
+  "results": [
+    {
+      "id": "G01_deduplicate_missing_items",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Tool mới cần danh sách nguồn; chưa có thì hỏi lại, không bịa items."
+      },
+      "input": "Lọc trùng các nguồn giúp tôi.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": true,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Bạn có thể cung cấp danh sách các nguồn mà bạn muốn lọc trùng không?"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "missing_info",
+        "observed_mismatch": "wrong_arg_value",
+        "failure_type": "missing_info",
+        "failures": [
+          "response_type: expected 'text', got None"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn có thể cung cấp danh sách các nguồn mà bạn muốn lọc trùng không?"
+          },
+          "result": {
+            "tool": "ask_user",
+            "question": "Bạn có thể cung cấp danh sách các nguồn mà bạn muốn lọc trùng không?",
+            "response_type": "text",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "G02_deduplicate_supplied_sources",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Route đến tool mới khi user đã cung cấp nguồn. Eval chấm routing; nội dung items và kết quả lọc được kiểm tra bằng unit test."
+      },
+      "input": "Chỉ lọc trùng các nguồn đã có này, không tìm web hay format: [{\"title\":\"A\",\"url\":\"https://example.org/ai?utm_source=demo\"},{\"title\":\"B\",\"url\":\"https://example.org/ai\"},{\"title\":\"C\",\"url\":\"https://example.org/robotics\"}]. Giữ bản đầu tiên của mỗi URL.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "deduplicate",
+            "args": {}
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "deduplicate",
+            "args": {
+              "items": [
+                {
+                  "url": "https://example.org/ai?utm_source=demo",
+                  "title": "A"
+                },
+                {
+                  "url": "https://example.org/ai",
+                  "title": "B"
+                },
+                {
+                  "url": "https://example.org/robotics",
+                  "title": "C"
+                }
+              ]
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "deduplicate",
+          "args": {
+            "items": [
+              {
+                "url": "https://example.org/ai?utm_source=demo",
+                "title": "A"
+              },
+              {
+                "url": "https://example.org/ai",
+                "title": "B"
+              },
+              {
+                "url": "https://example.org/robotics",
+                "title": "C"
+              }
+            ]
+          },
+          "result": {
+            "tool": "deduplicate",
+            "items": [
+              {
+                "url": "https://example.org/ai?utm_source=demo",
+                "title": "A"
+              },
+              {
+                "url": "https://example.org/robotics",
+                "title": "C"
+              }
+            ],
+            "input_count": 3,
+            "item_count": 2,
+            "duplicate_count": 1,
+            "removed_indices": [
+              1
+            ],
+            "invalid_items": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "G03_web_news_week",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Explicit topic=news, timeframe=week và giới hạn kết quả."
+      },
+      "input": "Tìm trên web 3 tin về robotics trong tuần này. Chỉ dùng từ khóa robotics.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "robotics",
+              "topic": "news",
+              "timeframe": "week",
+              "max_results": 3
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "robotics",
+              "topic": "news",
+              "timeframe": "week",
+              "max_results": 3
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "robotics",
+            "topic": "news",
+            "timeframe": "week",
+            "max_results": 3
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "robotics",
+            "topic": "news",
+            "timeframe": "week",
+            "items": [
+              {
+                "title": "Serve Robotics launches new business to become the AWS for robots | TechCrunch",
+                "url": "https://techcrunch.com/2026/11/05/serve-robotics-launches-new-business-to-become-the-aws-for-robots",
+                "source": "techcrunch.com",
+                "summary": "Serve Robotics, a maker of self-driving sidewalk delivery robots, is expanding beyond its autonomous delivery operations in a bid to become a technology supplier to other companies building robots.\n\nThe company, which spun out of Uber’s acquisition of Postmates in 2021 and went public in 2024, said Thursday it will launch a new business line called Physical AI Services. [...] Specifically, Serve Robotics will offer customers its connectivity and data tools. Bedrock Robotics, a startup developing self-driving systems for construction equipment, is a customer, according to Serve. It’s also working with T-Mobile to bring AI computing power closer to robots, Serve announced alongside its third-quarter earnings on Thursday.\n\n“We are solving the problem of robots in human spaces,” Serve Robotics CEO and co-founder Ai Kashani told TechCrunch. [...] Serve Robotics already makes two kinds of robots, the cute googly-eyed sidewalk delivery robot and one designed for hospitals that it got through its acquisition of Diligent Robotics.\n\nThose businesses are not going away, Kashani emphasized in a recent interview. Instead, he said there is opportunity to sell the technology it developed for its own robots to other companies developing robots for farms, warehouses, and other uncontrolled environments.",
+                "score": 0.63723457
+              },
+              {
+                "title": "Top Robotics Stocks With Strong Potential for Long-Term Growth",
+                "url": "https://finance.yahoo.com/markets/stocks/articles/top-robotics-stocks-strong-potential-153300390.html",
+                "source": "finance.yahoo.com",
+                "summary": "Robotics posted its best third-quarter revenues on record and turned profitable, reinforcing management's view of multiple growth engines heading into 2027. Fourth-quarter guidance points to continued demand across the AI value chain, from memory and interconnect test to robotics deployments. With an expanding, AI-ready robotics platform now generating profitable revenues, this Zacks Rank #1 company's near-term fundamental trajectory looks constructive. [...] Robotic Vehicle continues toward geosynchronous orbit, and Orbital Robotics is preparing robotic arms for NASA's Astrobee free-flyers aboard the International Space Station. Quantum-robotics fusion remains early, though Q-CTRL moved its GPS-free quantum magnetic navigation trials from aircraft to maritime platforms in the Pacific in October. [...] The Robotics Screen makes it easy to identify high-potential stocks at any given time, just like the ones discussed below. Leveraging advanced tools, the thematic screens identify companies shaping the future, making it easier to capitalize on emerging trends.  \n  \nReady to uncover more transformative thematic investment ideas? Explore 30 cutting-edge investment themes with Zacks Thematic Screens and discover your next big opportunity.",
+                "score": 0.5760895
+              },
+              {
+                "title": "Recent advances in AI are creating a 'paradigm shift' for robotics - Berkeley News",
+                "url": "https://news.berkeley.edu/2026/11/09/recent-advances-in-ai-are-creating-a-paradigm-shift-for-robotics",
+                "source": "news.berkeley.edu",
+                "summary": "Traditionally, engineers can directly program the software that tells robots how to perceive objects, plan movements and control their actions, a process called model-based robotics. Or, with model-free robotics, they can train robots to learn behaviors from demonstrations through imitation learning. The first approach requires extensive engineering, while the second needs enormous amounts of data and time. [...] Berkeley-based Ambi Robotics, which specializes in logistics and warehouse order fulfillment, applied the new methods earlier this year to analyze parcel sorting data and test updates to robot behavior. Tests showed an increased capacity of over 15,000 packages sorted annually per robot; the change is now deployed across 30% of the company’s U.S. fleet. [...] Ken Goldberg\n\n“Agentic robotics is a fundamental shift in how robots are controlled,” Goldberg said. “Instead of collecting massive amounts of data and hand-tuning every behavior, teams of agents can quickly generate, test and refine robot programs that allow human engineers to interpret how the programs work for fine-tuning and verification.”",
+                "score": 0.52057004
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G04_format_existing_items",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Dữ liệu đã đủ thì format, tránh gọi tool research thừa."
+      },
+      "input": "Chỉ format dữ liệu sẵn có sau thành bullets, không tìm thêm: [{\"title\":\"Tin A\",\"url\":\"https://example.org/a\",\"summary\":\"Nội dung A\"}].",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "format",
+            "args": {
+              "template": "bullets"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "format",
+            "args": {
+              "items": [
+                {
+                  "title": "Tin A",
+                  "url": "https://example.org/a",
+                  "summary": "Nội dung A"
+                }
+              ],
+              "template": "bullets"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "unnecessary_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "format",
+          "args": {
+            "items": [
+              {
+                "title": "Tin A",
+                "url": "https://example.org/a",
+                "summary": "Nội dung A"
+              }
+            ],
+            "template": "bullets"
+          },
+          "result": {
+            "tool": "render_digest",
+            "template": "bullets",
+            "markdown": "- Nội dung A - [example.org](https://example.org/a)",
+            "item_count": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "G05_confirm_before_delivery",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Yêu cầu gửi ban đầu chưa phải xác nhận; hỏi yes/no trước."
+      },
+      "input": "Gửi lên Telegram nội dung này giúp tôi: Bản tin AI thử nghiệm.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Bạn có chắc chắn muốn gửi nội dung \"Bản tin AI thử nghiệm\" lên Telegram không?",
+              "response_type": "yes_no"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn có chắc chắn muốn gửi nội dung \"Bản tin AI thử nghiệm\" lên Telegram không?",
+            "response_type": "yes_no"
+          },
+          "result": {
+            "tool": "ask_user",
+            "question": "Bạn có chắc chắn muốn gửi nội dung \"Bản tin AI thử nghiệm\" lên Telegram không?",
+            "response_type": "yes_no",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "G06_replace_twitter_with_web",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Hồi quy M06: đổi nguồn phải bỏ tool cũ, không gọi song song."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tìm tweet về AI tuần này."
+        },
+        {
+          "role": "user",
+          "content": "Bỏ hẳn Twitter. Chỉ lấy tin trên web tuần này."
+        },
+        {
+          "role": "user",
+          "content": "Giữ chủ đề AI, chỉ tìm web thôi."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "AI",
+              "topic": "news",
+              "timeframe": "week"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": true,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "AI",
+              "topic": "general",
+              "timeframe": "week"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": "wrong_arg_value",
+        "failure_type": "wrong_tool",
+        "failures": [
+          "topic: expected 'news', got 'general'"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "AI",
+            "topic": "general",
+            "timeframe": "week"
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "AI",
+            "topic": "general",
+            "timeframe": "week",
+            "items": [
+              {
+                "title": "Artificial intelligence in education - AI | UNESCO",
+                "url": "https://www.unesco.org/en/digital-education/artificial-intelligence",
+                "source": "unesco.org",
+                "summary": "Artificial Intelligence (AI) has the potential to address some of the biggest challenges in education today, innovate teaching and learning practices, and accelerate progress towards SDG 4. However, rapid technological developments inevitably bring multiple risks and challenges, which have so far outpaced policy debates and regulatory frameworks. UNESCO is committed to supporting Member States to harness the potential of AI technologies for achieving the Education 2030 Agenda, while ensuring [...] of innovation and knowledge. [...] UNESCO’s mandate calls inherently for a human-centred approach to AI. It aims to shift the conversation to include AI’s role in addressing current inequalities regarding access to knowledge, research and the diversity of cultural expressions and to ensure AI does not widen the technological divides within and between countries. The promise of “AI for all” must be that everyone can take advantage of the technological revolution under way and access its fruits, notably in terms of innovation and",
+                "score": 0.5622973
+              },
+              {
+                "title": "Super Intelligence",
+                "url": "https://www.anl.gov/si",
+                "source": "anl.gov",
+                "summary": "Super Intelligence (SI), also known as Artificial Intelligence (AI), is transforming how we advance science, strengthen national security, and drive U.S. innovation leadership. Argonne is leveraging world-class expertise and computing power to lead in the responsible development and deployment of SI. Our researchers are applying cutting-edge SI to engineer next-generation materials, fortify the nation’s energy infrastructure, speed breakthroughs in medical treatments, and automate scientific [...] automate scientific experiments. These efforts are unlocking new frontiers of discovery while enhancing resilience and competitiveness across critical sectors.",
+                "score": 0.49318945
+              },
+              {
+                "title": "ARTIFICIAL INTELLIGENCE - Cambridge English Dictionary",
+                "url": "https://dictionary.cambridge.org/dictionary/english/artificial-intelligence",
+                "source": "dictionary.cambridge.org",
+                "summary": "## Browse\n\n{{randomImageQuizHook.quizId}}\n{{randomImageQuizHook.quizId}}\n\n## More meanings of artificial intelligence\n\nWord of the Day\n\npiece of advice\n\nan opinion that someone offers you about what you should do or how you should act in a particular situation\n\nThe Word Watcher: Dating\n\nBlog\n\nThe Word Watcher: Dating\n\nAI icon\n\nAI icon\ncdo logo\ncdo logo\ncdo logo\ncdo logo\n\n## Learn more with +Plus\n\n## Learn more with +Plus\n\nCambridge Dictionary\nCambridge Dictionary [...] Cambridge Dictionary\nAI icon\nCambridge Dictionary Online\n\n# Meaning of artificial intelligence in English\n\nYour browser doesn't support HTML5 audio\n\nYour browser doesn't support HTML5 audio\n\n## artificial intelligence | American Dictionary\n\nYour browser doesn't support HTML5 audio\n\n## artificial intelligence | Business English\n\nYour browser doesn't support HTML5 audio\n\nYour browser doesn't support HTML5 audio\n\n## Translations of artificial intelligence\n\nGet a quick, free translation!\n\n## Browse [...] To add artificial intelligence to a word list please sign up or log in.\n\nAdd artificial intelligence to one of your lists below, or create a new one.\n\n{{message}}\n\n{{message}}\n\nSomething went wrong.\n\n{{message}}\n\n{{message}}\n\nSomething went wrong.\n\n{{message}}\n\n{{message}}\n\nThere was a problem sending your report.\n\n{{message}}\n\n{{message}}\n\nThere was a problem sending your report.",
+                "score": 0.43208793
+              },
+              {
+                "title": "AI learns from the products of thinking, not thought itself. That’s a problem for machines – and for us",
+                "url": "https://theconversation.com/ai-learns-from-the-products-of-thinking-not-thought-itself-thats-a-problem-for-machines-and-for-us-293696",
+                "source": "theconversation.com",
+                "summary": "For humans, this means designing AI tools that preserve the processes of intelligence within a person. In a trial at Harvard, students taught by a well-built AI physics tutor learned more, and faster, than peers in an active-learning classroom because the tutor kept them doing the generative work. [...] What can be done about the problem? The answer may be to bring more process into the equation.\n\nFor AI, this means building systems that use more human-like processes themselves. An assistant could revise its answer when someone challenges how it framed the problem, rather than simply agreeing, as current systems often do. Or an agent could learn from failures and mistakes, allowing pushback from the world to materially change how it treats the task. [...] Human learning too requires process. In education, and in any skilled enterprise, we need to consider how AI systems are designed and used to preserve more of the thinking and learning process.\n\nIt is currently easy for machines to produce more traces of thought, but process is much harder to build. If we get it right, our machines can become more intelligent without making us less so.",
+                "score": 0.43079433
+              },
+              {
+                "title": "Intro to Artificial Intelligence - Artificial Intelligence and Scholarly Research - LibGuides at National University",
+                "url": "https://resources.nu.edu/ai",
+                "source": "resources.nu.edu",
+                "summary": "## What is ChatGPT (and the Many Other Large Language Model AI Chatbots)\n\n### What is Generative AI?\n\nGenerative Artificial Intelligence (GenAI) refers to technology that can create new content, such as text, images, audio, videos, computer code, and more, in response to a user's prompt or question. [...] While AI can be helpful, it should not replace the critical thinking, communication, and problem-solving skills that are essential for academic and career success.\n\nOverreliance on AI may limit opportunities to develop the skills you will need in situations where AI is unavailable or inappropriate, such as presentations, interviews, professional conversations, exams, or dissertation defenses. [...] Generative AI can be a helpful learning partner when used thoughtfully and responsibly. Rather than doing your work for you, AI tools can support your learning process and help you strengthen important academic and professional skills.\n\nYou might use AI tools to:",
+                "score": 0.35307175
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G07_correct_account_and_limit",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Ưu tiên correction mới nhất và bỏ @ khỏi screenname."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Lấy 5 bài mới nhất của @NASA."
+        },
+        {
+          "role": "user",
+          "content": "Sửa thành tài khoản @SpaceX và chỉ 2 bài."
+        },
+        {
+          "role": "user",
+          "content": "Đúng, lấy đúng tài khoản và số lượng vừa sửa."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "SpaceX",
+              "limit": 2
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "SpaceX",
+              "limit": 2
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "timeline",
+          "args": {
+            "screenname": "SpaceX",
+            "limit": 2
+          },
+          "result": {
+            "tool": "get_user_tweets",
+            "error": "RuntimeError",
+            "message": "Missing RAPIDAPI_KEY env var"
+          }
+        }
+      ]
+    },
+    {
+      "id": "G08_cancel_delivery",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "User từ chối gửi thì dừng hành động; no_tool không tự kiểm tra nội dung câu trả lời."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Gửi bản tin AI lên Telegram giúp tôi."
+        },
+        {
+          "role": "assistant",
+          "content": "Bạn xác nhận muốn gửi bản tin AI lên Telegram không?"
+        },
+        {
+          "role": "user",
+          "content": "Không gửi nữa. Chỉ trả lời đã hủy, không gọi tool."
+        }
+      ],
+      "expect": {
+        "no_tool": true
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [],
+        "actual_text": "Đã hủy.",
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G09_deduplicate_after_clarification",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Sau clarify phải dùng items vừa được cung cấp để route đến tool mới. Payload được kiểm tra bằng unit test."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tôi muốn lọc trùng các nguồn."
+        },
+        {
+          "role": "assistant",
+          "content": "Bạn cung cấp danh sách nguồn cần lọc nhé."
+        },
+        {
+          "role": "user",
+          "content": "Đây là dữ liệu: [{\"title\":\"A\",\"url\":\"https://example.org/paper#intro\"},{\"title\":\"B\",\"url\":\"https://example.org/paper\"}]. Chỉ lọc trùng, giữ bản đầu; không tìm web hoặc format."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "deduplicate",
+            "args": {}
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "deduplicate",
+            "args": {
+              "items": [
+                {
+                  "url": "https://example.org/paper#intro",
+                  "title": "A"
+                },
+                {
+                  "url": "https://example.org/paper",
+                  "title": "B"
+                }
+              ]
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "deduplicate",
+          "args": {
+            "items": [
+              {
+                "url": "https://example.org/paper#intro",
+                "title": "A"
+              },
+              {
+                "url": "https://example.org/paper",
+                "title": "B"
+              }
+            ]
+          },
+          "result": {
+            "tool": "deduplicate",
+            "items": [
+              {
+                "url": "https://example.org/paper#intro",
+                "title": "A"
+              }
+            ],
+            "input_count": 2,
+            "item_count": 1,
+            "duplicate_count": 1,
+            "removed_indices": [
+              1
+            ],
+            "invalid_items": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "G10_correct_news_timeframe",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Đổi timeframe/limit nhưng giữ chủ đề và nguồn web."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tìm 5 tin AI trên web tuần này."
+        },
+        {
+          "role": "user",
+          "content": "Đổi sang hôm nay, chỉ lấy 2 tin."
+        },
+        {
+          "role": "user",
+          "content": "Giữ từ khóa AI, dùng khoảng thời gian và số lượng vừa sửa."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "AI",
+              "topic": "news",
+              "timeframe": "day",
+              "max_results": 2
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "AI",
+              "topic": "news",
+              "timeframe": "day",
+              "max_results": 2
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "AI",
+            "topic": "news",
+            "timeframe": "day",
+            "max_results": 2
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "AI",
+            "topic": "news",
+            "timeframe": "day",
+            "items": [
+              {
+                "title": "AI and your job: Threat or opportunity?",
+                "url": "https://www.fox10tv.com/2026/11/10/ai-your-job-threat-or-opportunity",
+                "source": "fox10tv.com",
+                "summary": "MOBILE, Ala. (WALA) - Artificial intelligence is becoming a bigger part of everyday life, raising questions about what the technology could mean for workers and their jobs.\n\nSome economists believe AI poses a particular threat to entry-level and repetitive work, including call center, data entry and junior copywriting jobs, according to The Wall Street Journal. Those tasks may be easier to automate. [...] But AI could also create opportunities. A Bloomberg article points to potential job growth in construction and manufacturing as companies build data centers and produce the chips that power the technology. Some higher-skilled office workers could also benefit if AI helps them become more productive. [...] The long-term impact on jobs remains unclear, but workers can take steps to prepare. Exploring AI chatbots, writing assistants and other tools may help people find ways to work more efficiently and develop skills that complement the technology.",
+                "score": 0.57969785
+              },
+              {
+                "title": "Asia not riding but building the AI boom – GIS Reports",
+                "url": "https://www.gisreportsonline.com/r/asia-building-ai-boom",
+                "source": "gisreportsonline.com",
+                "summary": "The AI ecosystem can be generally separated between three elements: models, compute power and supply chains – with the U.S. and China competing and leading for the first two. Asian countries are looking at how they can stand out amid this intense East-West competition, while capitalizing on their strengths in technology manufacturing supply chains. This has led smaller economies to identify their competitive advantages while investing in novel applications for AI in various industries such as [...] Demand for artificial intelligence is surging and boosting economic growth, with the headlines focusing on North America. But when Asia is included, total worldwide spending on AI and related industries is expected to top $1 trillion in 2026. Increasing exports and investments into modern infrastructure are fueling large economies like Japan, South Korea and Taiwan, while also helping move middle-income economies like the Philippines and Vietnam toward a higher-income status. [...] In early 2026, President Lee Jae Myung unveiled the AI Action Plan (2026-2028), which has the goal of positioning South Korea as one of the top three global leaders in the technology. The initiative has three policy pillars: Building an AI innovation ecosystem, fostering a nationwide AI transformation and contributing to a global AI-enabled society. To get there, the plan identifies 99 implementation tasks and makes over 300 policy recommendations. Progress will be monitored by a newly",
+                "score": 0.5774358
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
