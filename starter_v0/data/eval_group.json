@@ -1,7 +1,282 @@
 {
   "dataset_id": "day04_v2_research_group",
   "dataset_role": "group",
-  "description": "Case do NHÓM tự viết thêm để cover thêm trường hợp. Mỗi case cần: id, phase='B', query HOẶC turns, failure_type (thuộc allowed_failure_types), và expect (tool_calls[...] hoặc no_tool=true). Nên kèm metadata.what_it_tests.",
-  "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "description": "10 group cases: 5 single-turn + 5 multi-turn, including 2 cases for the new deduplicate tool. Automated matching checks selected args; manually review search queries and clarification text.",
+  "allowed_failure_types": [
+    "wrong_tool",
+    "wrong_arg_value",
+    "wrong_boundary",
+    "unnecessary_tool",
+    "out_of_scope",
+    "missing_info"
+  ],
+  "cases": [
+    {
+      "id": "G01_handle_normalization",
+      "phase": "B",
+      "suite": "group",
+      "failure_type": "wrong_arg_value",
+      "query": "Lấy 4 bài đăng mới nhất của tài khoản @karpathy trên X.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "karpathy",
+              "limit": 4
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Bỏ @ khi chuyển tài khoản sang screenname; giữ limit người dùng yêu cầu."
+      }
+    },
+    {
+      "id": "G02_latest_social",
+      "phase": "B",
+      "suite": "group",
+      "failure_type": "wrong_tool",
+      "query": "Tìm 3 bài đăng mới nhất trên X về embodied AI, không giới hạn một tài khoản cụ thể.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "search_type": "Latest",
+              "limit": 3
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Tìm theo chủ đề trên X, không lấy timeline; mới nhất là Latest. Review thủ công query phải giữ chủ đề embodied AI."
+      }
+    },
+    {
+      "id": "G03_monthly_news",
+      "phase": "B",
+      "suite": "group",
+      "failure_type": "wrong_arg_value",
+      "query": "Tìm 4 tin trên web trong tháng vừa qua về robot hình người.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "topic": "news",
+              "timeframe": "month",
+              "max_results": 4
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Trích khoảng thời gian tháng và số kết quả. Review thủ công query phải giữ chủ đề robot hình người."
+      }
+    },
+    {
+      "id": "G04_missing_article",
+      "phase": "B",
+      "suite": "group",
+      "failure_type": "missing_info",
+      "query": "Đọc nội dung bài viết đó giúp mình. Mình chưa gửi link hay nội dung bài.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Không tự tạo URL khi người dùng chưa cung cấp bài viết; review câu hỏi có xin URL hay không."
+      }
+    },
+    {
+      "id": "G05_deduplicate_tracking",
+      "phase": "B",
+      "suite": "group",
+      "query": "Chỉ loại các URL trùng sau khi bỏ tracking và fragment, giữ item đầu tiên. Dùng mode normalized_url. Items: [{\"title\": \"One\", \"url\": \"https://docs.python.org/3/library/json.html?utm_source=newsletter\"}, {\"title\": \"Copy\", \"url\": \"https://docs.python.org/3/library/json.html\"}]",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "deduplicate",
+            "args": {
+              "mode": "normalized_url"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Route supplied items to the new deduplicate tool, not format/search; preserve original input metadata. Grader checks tool/mode only; manually verify items match the supplied context. Unit tests verify cleaning results."
+      }
+    },
+    {
+      "id": "G06_change_account_keep_limit",
+      "phase": "B",
+      "suite": "group",
+      "failure_type": "wrong_arg_value",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Lấy 7 bài đăng mới nhất của @sama."
+        },
+        {
+          "role": "assistant",
+          "content": "Bạn muốn giữ tài khoản @sama hay đổi tài khoản?"
+        },
+        {
+          "role": "user",
+          "content": "Đổi sang @karpathy, vẫn lấy đúng 7 bài. Chỉ lấy tài khoản mới."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "karpathy",
+              "limit": 7
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Sửa tài khoản theo lượt cuối nhưng giữ limit=7; không gọi lại cho tài khoản cũ."
+      }
+    },
+    {
+      "id": "G07_change_sort_keep_limit",
+      "phase": "B",
+      "suite": "group",
+      "failure_type": "wrong_arg_value",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tìm 6 bài đăng phổ biến nhất trên X về reinforcement learning."
+        },
+        {
+          "role": "assistant",
+          "content": "Bạn muốn xếp theo phổ biến hay mới nhất?"
+        },
+        {
+          "role": "user",
+          "content": "Chuyển sang mới nhất nhé, giữ nguyên chủ đề và số lượng."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "search_type": "Latest",
+              "limit": 6
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Đổi Top sang Latest; giữ limit=6 và chủ đề từ ngữ cảnh. Review query phải giữ reinforcement learning."
+      }
+    },
+    {
+      "id": "G08_deduplicate_change_mode",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Loại URL trùng từ items này bằng normalized_url: [{\"title\": \"One\", \"url\": \"https://docs.python.org/3/library/json.html?utm_source=newsletter\"}, {\"title\": \"Copy\", \"url\": \"https://docs.python.org/3/library/json.html\"}]"
+        },
+        {
+          "role": "assistant",
+          "content": "Bạn muốn giữ chế độ chuẩn hóa hay chỉ so URL chính xác?"
+        },
+        {
+          "role": "user",
+          "content": "Đổi sang exact_url, giữ nguyên items ở trên. Chỉ gọi tool loại trùng."
+        }
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "deduplicate",
+            "args": {
+              "mode": "exact_url"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Carry items from context, apply the latest mode correction and route to the new tool. Grader checks tool/mode only; manually verify items match the supplied context. Unit tests verify cleaning results."
+      }
+    },
+    {
+      "id": "G09_cancel_delivery",
+      "phase": "B",
+      "suite": "group",
+      "failure_type": "wrong_boundary",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Soạn bản tin tiêu đề Tin AI để chuẩn bị gửi Telegram."
+        },
+        {
+          "role": "assistant",
+          "content": "Bạn có xác nhận gửi bản tin Tin AI lên Telegram không?"
+        },
+        {
+          "role": "user",
+          "content": "Không gửi nữa. Hủy yêu cầu, chỉ ghi nhận đã hủy và không cần làm gì thêm."
+        }
+      ],
+      "expect": {
+        "no_tool": true,
+        "behavior": "acknowledge_cancellation"
+      },
+      "metadata": {
+        "what_it_tests": "Lượt cuối hủy gửi: không gọi send hoặc bất kỳ tool nào. Review câu trả lời xác nhận đã hủy; không đánh giá gửi thành công."
+      }
+    },
+    {
+      "id": "G10_fill_topic_keep_constraints",
+      "phase": "B",
+      "suite": "group",
+      "failure_type": "missing_info",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tìm 3 tin trên web trong tháng vừa qua giúp mình."
+        },
+        {
+          "role": "assistant",
+          "content": "Bạn muốn tìm tin về chủ đề nào?"
+        },
+        {
+          "role": "user",
+          "content": "Về imitation learning, giữ nguyên khoảng thời gian và số kết quả đã nói."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "topic": "news",
+              "timeframe": "month",
+              "max_results": 3
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Bổ sung chủ đề sau clarify và giữ month/max_results=3. Review query phải giữ imitation learning."
+      }
+    }
+  ]
 }

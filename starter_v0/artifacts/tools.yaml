@@ -123,3 +123,26 @@ tools:
         max_pages: {type: integer, default: 5, description: "Số trang"}
         max_chars: {type: integer, default: 8000, description: "Số ký tự"}
       required: [arxiv_url]
+
+  - name: deduplicate
+    description: "Remove duplicate URLs from existing items, keeping the first item and original order/metadata. Use only when supplied or retrieved items need deduplication. Does not search, read pages, summarize, format a digest or send messages. Ask for items if none are available."
+    parameters:
+      type: object
+      properties:
+        items:
+          type: array
+          description: "Existing items to clean; never invent items. Items without a URL are retained."
+          items:
+            type: object
+            properties:
+              title: {type: string}
+              url: {type: string}
+              source: {type: string}
+              summary: {type: string}
+              section: {type: string}
+        mode:
+          type: string
+          enum: [exact_url, normalized_url]
+          default: normalized_url
+          description: "normalized_url removes URL fragments and tracking parameters; exact_url only matches identical URLs after trimming. Meaningful query/path differences are preserved."
+      required: [items]
