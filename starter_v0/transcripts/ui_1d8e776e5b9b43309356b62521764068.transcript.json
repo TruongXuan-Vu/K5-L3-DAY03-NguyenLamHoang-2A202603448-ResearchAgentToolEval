@@ -1,0 +1,52 @@
+{
+  "transcript_id": "v2_ui_c96ed820c6054336b49936bd20b4ce07",
+  "version": "v2",
+  "artifact_version": "v2+p9e8941334829+t5b22a2476d41",
+  "prompt_hash": "9e89413348295b0307fa137106171afdd94bc9cdae7f5a4fa0413241dcb29acd",
+  "tools_hash": "5b22a2476d41b989d5dc1e54f24ce7890e781909deb2f7afafb856ab53a6d7c0",
+  "source": "streamlit",
+  "provider": "openrouter",
+  "model": "openai/gpt-4o-mini",
+  "system_prompt": "C:\\Users\\Hoang\\K5-L3-DAY03-NguyenLamHoang-2A202603448-ResearchAgentToolEval\\starter_v0\\artifacts\\system_prompt.md",
+  "tools": "C:\\Users\\Hoang\\K5-L3-DAY03-NguyenLamHoang-2A202603448-ResearchAgentToolEval\\starter_v0\\artifacts\\tools.yaml",
+  "history_window": 8,
+  "max_tool_rounds": 4,
+  "created_at": "2026-11-10T12:08:54",
+  "updated_at": "2026-11-10T12:16:54",
+  "turns": [
+    {
+      "turn_index": 1,
+      "started_at": "2026-11-10T12:08:54",
+      "user": "Tóm tắt 5 tweet mới nhất giúp mình.",
+      "status": "answered",
+      "assistant_text": "Bạn có thể cho mình biết tên tài khoản mà bạn muốn tóm tắt tweet không?",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": "Bạn có thể cho mình biết tên tài khoản mà bạn muốn tóm tắt tweet không?",
+          "tool_calls": [],
+          "tool_results": []
+        }
+      ],
+      "tool_events": [],
+      "ended_at": "2026-11-10T12:08:56"
+    },
+    {
+      "turn_index": 2,
+      "started_at": "2026-11-10T12:16:52",
+      "user": "Đăng bản tin này lên Telegram",
+      "status": "answered",
+      "assistant_text": "Bạn có xác nhận muốn đăng bản tin này lên Telegram không?",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": "Bạn có xác nhận muốn đăng bản tin này lên Telegram không?",
+          "tool_calls": [],
+          "tool_results": []
+        }
+      ],
+      "tool_events": [],
+      "ended_at": "2026-11-10T12:16:54"
+    }
+  ]
+}

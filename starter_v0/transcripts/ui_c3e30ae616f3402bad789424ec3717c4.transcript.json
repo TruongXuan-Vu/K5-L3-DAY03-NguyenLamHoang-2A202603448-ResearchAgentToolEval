@@ -1,0 +1,157 @@
+{
+  "transcript_id": "v0_ui_33e186ac1fb943ceb110163e14d6780a",
+  "version": "v0",
+  "artifact_version": "v0+p9e8941334829+t5b22a2476d41",
+  "prompt_hash": "9e89413348295b0307fa137106171afdd94bc9cdae7f5a4fa0413241dcb29acd",
+  "tools_hash": "5b22a2476d41b989d5dc1e54f24ce7890e781909deb2f7afafb856ab53a6d7c0",
+  "source": "streamlit",
+  "provider": "openrouter",
+  "model": "openai/gpt-4o-mini",
+  "system_prompt": "C:\\Users\\Hoang\\K5-L3-DAY03-NguyenLamHoang-2A202603448-ResearchAgentToolEval\\starter_v0\\artifacts\\system_prompt.md",
+  "tools": "C:\\Users\\Hoang\\K5-L3-DAY03-NguyenLamHoang-2A202603448-ResearchAgentToolEval\\starter_v0\\artifacts\\tools.yaml",
+  "history_window": 8,
+  "max_tool_rounds": 4,
+  "created_at": "2026-11-10T11:59:59",
+  "updated_at": "2026-11-10T12:00:36",
+  "turns": [
+    {
+      "turn_index": 1,
+      "started_at": "2026-11-10T11:59:59",
+      "user": "thông tin về Jensen Huang ngoại tình",
+      "status": "answered",
+      "assistant_text": "Gần đây, CEO của Nvidia, Jensen Huang, đã thừa nhận rằng ông đã ngoại tình, gây ra nhiều phản ứng trên mạng xã hội. Vào ngày 8 tháng 11, ông đã gửi thông điệp đến nhân viên, trong đó ông xin lỗi gia đình và nhận trách nhiệm về hành động của mình. Ông cũng cam kết hợp tác với cuộc điều tra độc lập của Nvidia liên quan đến các báo cáo cho rằng ông có thể đã trở thành mục tiêu của một chiến dịch tình báo nước ngoài.\n\nNgười phụ nữ liên quan đến vụ việc được xác định là Alice Huang, một doanh nhân có liên quan đến công ty Megaspeed, mà các quan chức tình báo Mỹ nghi ngờ có liên hệ với Trung Quốc. Jensen Huang đã gặp Alice Huang trong một số sự kiện, và mối quan hệ của họ đã bị chú ý từ tháng 10 khi thông tin bắt đầu rò rỉ ra ngoài.\n\nDưới đây là một số bài viết liên quan đến vụ việc:\n\n1. [Những dấu mốc chính quanh bê bối ngoại tình của CEO Nvidia - Báo VnExpress](https://vnexpress.net/nhung-dau-moc-chinh-quanh-be-boi-ngoai-tinh-cua-ceo-nvidia-5142619.html)\n2. [CEO JENSEN HUANG THỪA NHẬN NGOẠI TÌNH: NVIDIA ĐIỀU TRA NGHI ÁN GIÁN ĐIỆP TRUNG QUỐC - YouTube](https://www.youtube.com/watch?v=BrBnUjGudPw)\n3. [CEO Nvidia Jensen Huang thừa nhận ngoại tình: Nữ doanh nhân Alice Huang là ai? - Tuổi Trẻ Online](https://tuoitre.vn/ceo-nvidia-jensen-huang-thua-nhan-ngoai-tinh-nu-doanh-nhan-alice-huang-la-ai-100261109113347749.htm)\n4. [CEO Nvidia thừa nhận không chung thủy với vợ | VOZ](https://voz.vn/t/ceo-nvidia-thua-nhan-khong-chung-thuy-voi-vo.1296529)\n5. [CEO NVIDIA Jensen Huang: Từ người rửa bát đến đế chế chip AI và cú sốc - VietNamNet](https://vietnamnet.vn/ceo-nvidia-jensen-huang-tu-nguoi-rua-bat-den-de-che-chip-ai-va-cu-soc-2573092.html)\n\nNếu bạn cần thêm thông tin chi tiết, hãy cho tôi biết!",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": null,
+          "tool_calls": [
+            {
+              "name": "lookup",
+              "args": {
+                "query": "Jensen Huang ngoại tình",
+                "topic": "general",
+                "timeframe": "week",
+                "max_results": 5
+              }
+            }
+          ],
+          "tool_results": [
+            {
+              "tool": "lookup",
+              "args": {
+                "query": "Jensen Huang ngoại tình",
+                "topic": "general",
+                "timeframe": "week",
+                "max_results": 5
+              },
+              "result": {
+                "tool": "web_search",
+                "query": "Jensen Huang ngoại tình",
+                "topic": "general",
+                "timeframe": "week",
+                "items": [
+                  {
+                    "title": "Những dấu mốc chính quanh bê bối ngoại tình của CEO Nvidia - Báo VnExpress",
+                    "url": "https://vnexpress.net/nhung-dau-moc-chinh-quanh-be-boi-ngoai-tinh-cua-ceo-nvidia-5142619.html",
+                    "source": "vnexpress.net",
+                    "summary": "Jensen Huang, CEO Nvidia, phát biểu tại Diễn đàn Kinh tế Thế giới ở Davos, Thụy Sĩ, ngày 21/1/2026. Ảnh: AP\n\n \n\nNgày 8/11, ông Jensen Huang thừa nhận đã ngoại tình, song nhấn mạnh \"tôi cam kết bảo vệ NVIDIA và hỗ trợ an ninh quốc gia của nước Mỹ\".\n\nSau lời thừa nhận của ông Huang, Nvidia thông báo hội đồng quản trị đang mở một cuộc điều tra độc lập đối với các báo cáo cho rằng CEO của họ đã trở thành mục tiêu của một chiến dịch tình báo nước ngoài. [...] Lời thừa nhận ngoại tình của CEO Nvidia Jensen Huang đã khiến mạng xã hội xôn xao, khi nhiều người dùng bày tỏ sự bất ngờ trước những tiết lộ về đời tư của tỷ phú công nghệ nổi tiếng thế giới.\n\nÔng Huang không nêu tên người phụ nữ liên quan, nhưng giới chức Mỹ đã xác định cô là Alice Huang, người mà họ nghi ngờ đang làm gián điệp cho Trung Quốc. [...] Tháng 6/2024, Alice Huang gọi điện mời Jensen Huang tham dự một bữa tiệc của lãnh đạo các công ty công nghệ trong thời gian diễn ra triển lãm công nghệ Computex 2024 tại Đài Bắc, đảo Đài Loan. Trong bức ảnh chụp sự kiện, ông chủ Nvidia mặc áo khoác da, ngồi cạnh một người phụ nữ tóc dài đeo trang sức, được cho là Alice Huang.",
+                    "score": 0.87218446
+                  },
+                  {
+                    "title": "CEO JENSEN HUANG THỪA NHẬN NGOẠI TÌNH: NVIDIA ĐIỀU TRA NGHI ÁN GIÁN ĐIỆP TRUNG QUỐC",
+                    "url": "https://www.youtube.com/watch?v=BrBnUjGudPw",
+                    "source": "youtube.com",
+                    "summary": "Tờ New York Times đưa tin ông Jensen Huang (Hoàng Nhân Huân) có mối quan hệ mập mờ với bà Alice Huang, cựu lãnh đạo công ty Megaspeed có trụ sở tại Singapore. Vẫn theo tờ báo này, các quan chức tình báo Mỹ tin rằng nữ doanh nhân Trung Quốc Alice Huang, là gián điệp hoạt động cho Bắc Kinh.\n\nTrong một thông điệp gửi đến các nhân viên Nvidia hôm 8/11 (giờ Mỹ), CEO Jensen Huang thừa nhận đã “không chung thủy” với vợ, đồng thời xin lỗi vì đã làm tổn thương bà và các con. \n\nTruy cập website: [...] # CEO JENSEN HUANG THỪA NHẬN NGOẠI TÌNH: NVIDIA ĐIỀU TRA NGHI ÁN GIÁN ĐIỆP TRUNG QUỐC\n## Channel: BBC News Tiếng Việt (verified)\n2.42M subscribers\n\n### Description\n50,444 views\nGã khổng lồ công nghệ Mỹ Nvidia cho biết đang điều tra khả năng CEO Jensen Huang trở thành mục tiêu của một chiến dịch tình báo nước ngoài, sau khi ông thừa nhận không chung thủy với vợ. [...] Truy cập website: \n\n#BBCNewsTiengViet #JensenHuang #Nvidia #TrungQuoc #giandiep\n\n0:00 Mở đầu\n0:47 Jensen Huang là ai?\n3:00 Căng thẳng Mỹ - Trung\n4:39 Nvidia là công ty gì?\n6:17 Vợ của ông Huang là ai?\n7:27 Chúng ta biết gì về bê bối tình cảm này?\n8:37 Kết",
+                    "score": 0.85008353
+                  },
+                  {
+                    "title": "CEO Nvidia Jensen Huang thừa nhận ngoại tình: Nữ doanh nhân Alice Huang là ai? - Tuổi Trẻ Online",
+                    "url": "https://tuoitre.vn/ceo-nvidia-jensen-huang-thua-nhan-ngoai-tinh-nu-doanh-nhan-alice-huang-la-ai-100261109113347749.htm",
+                    "source": "tuoitre.vn",
+                    "summary": "CEO Nvidia Jensen Huang và bà Alice Huang - Ảnh: NetThunder/LinkedIn\n\nNgày 8-11, tỉ phú người Mỹ gốc Đài Loan Jensen Huang (Hoàng Nhn Hun), 63 tuổi, giám đốc điều hành (CEO) Tập đoàn sản xuất chip Nvidia của Mỹ, thừa nhận với nhn viên Nvidia rằng ông đã không chung thủy với người vợ gắn bó suốt 41 năm. Ông xin lỗi gia đình và cam kết hợp tác với cuộc điều tra độc lập của Nvidia. [...] Nvidia khẳng định các cuộc gặp giữa hai người là hoạt động tiếp xúc thông thường với khách hàng. Người phát ngôn công ty nói rõ khách hàng chỉ được tiếp cận thông tin kinh doanh thông thường, không có quyền tiếp cận bí mật thương mại. Jensen Huang cũng nói với Hãng tin Bloomberg rằng những lần tương tác đều liên quan đến Megaspeed và \"hoàn toàn bình thường, không có gì bất thường\". [...] Tổng thống Donald Trump ủng hộ tỉ phú Jensen Huang tiếp tục giữ chức giám đốc điều hành Tập đoàn Nvidia của Mỹ, giữa bê bối vị CEO ngoại tình với nữ doanh nhn bị nghi làm gián điệp.\n\nĐọc tiếp  Về trang Chủ đề\n\nBÌNH AN\n\nTrở thành người đầu tiên tặng sao cho bài viết  0    0   0\n\nTặng sao cho bài viết hay\n\nChia sẻ\n\nCHIA SẺ\n\n Facebook   Mail   Twitter / X   LinkedIn\n\ngoogle Nguồn ưu tiên trên Google   Ưu tiên Tuổi Trẻ trên Google Search. Xem hướng dẫn.)\n\nTặng sao\n\nChuyển sao tặng cho thành viên",
+                    "score": 0.8479807
+                  },
+                  {
+                    "title": "CEO Nvidia thừa nhận không chung thủy với vợ | VOZ",
+                    "url": "https://voz.vn/t/ceo-nvidia-thua-nhan-khong-chung-thuy-voi-vo.1296529",
+                    "source": "voz.vn",
+                    "summary": "Nvidia cho biết đang điều tra khả năng CEO Jensen Huang trở thành mục tiêu của một chiến dịch tình báo nước ngoài, sau khi ông thừa nhận không chung thủy với vợ.  \n   \n Ngày 8/11, theo Reuters, trong thông điệp gửi nhn viên, ông Huang nói đã ngoại tình và tuyên bố \"nhận hoàn toàn trách nhiệm\" về hành động của mình. \"Hành động của tôi làm tổn thương vợ và các con. Không có lý do nào có thể biện minh cho những gì tôi đã làm. Tôi vô cùng xin lỗi\", ông nói. [...] Jensen Huang kết hôn với Lori Huang (tên thời con gái là Lori Mills) sau khi quen nhau tại Đại học bang Oregon. Hai người gặp nhau khi ông 17 tuổi còn bà 19 tuổi và đã gắn bó hơn bốn thập kỷ. Họ có hai con, Madison và Spencer, hiện đều làm tại Nvidia. [...] Jensen Huang đi cùng Alice Huang tại một nhà hàng ở Đài Bắc năm 2025. Ảnh: Sunday Times  \n   \n Thông tin bắt đầu rộ lên vào tháng 10, khi New York Times cho biết Jensen Huang có mối quan hệ mập mờ với Alice Huang, cựu lãnh đạo Megaspeed, công ty có trụ sở tại Singapore. Đơn vị chuyên mua chip AI của Nvidia này đang bị giới chức Mỹ giám sát do nghi ngờ hỗ trợ Bắc Kinh tiếp cận chip AI tiên tiến vốn bị cấm xuất khẩu sang Trung Quốc.",
+                    "score": 0.8173562
+                  },
+                  {
+                    "title": "CEO NVIDIA Jensen Huang: Từ người rửa bát đến đế chế chip AI và cú sốc",
+                    "url": "https://vietnamnet.vn/ceo-nvidia-jensen-huang-tu-nguoi-rua-bat-den-de-che-chip-ai-va-cu-soc-2573092.html",
+                    "source": "vietnamnet.vn",
+                    "summary": "Thêm VietNamNet trên Google\n\nCEO NVIDIA Jensen Huang thừa nhận ngoại tình, gy cú sốc cho tập đoàn chip hàng đầu thế giới. Từng rửa bát, làm bồi bàn tại Mỹ, ông đã gy dựng đế chế NVIDIA trị giá 4.500 tỷ USD và sở hữu khối tài sản ước tính hơn 162 tỷ USD.\n\n## Bê bối đời tư gy sức ép lên đế chế NVIDIA [...] CEO NVIDIA Jensen Huang ngoại tình: Tập đoàn 4.500 tỷ USD ảnh hưởng ra sao?CEO NVIDIA Jensen Huang công khai thừa nhận không chung thủy với vợ, sau khi thông tin đời tư xuất hiện trên truyền thông. Cổ phiếu NVIDIA chao đảo sau thông tin chấn động này. [...] Ngày 8/11, CEO NVIDIA Jensen Huang, 63 tuổi, thừa nhận với nhn viên tập đoàn rằng ông đã không chung thủy với người vợ Lori Huang sau hơn 41 năm chung sống. Ông gửi lời xin lỗi gia đình, thừa nhận hoàn toàn trách nhiệm về những tổn thương gy ra.\n\nTheo NYT, người phụ nữ có quan hệ tình cảm với Huang là Alice Huang (Huang Le), nữ doanh nhn Trung Quốc từng giữ vị trí lãnh đạo tại Megaspeed International, doanh nghiệp kinh doanh trung tm dữ liệu và có quan hệ thương mại với NVIDIA.",
+                    "score": 0.8016413
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "round": 2,
+          "assistant_text": "Gần đây, CEO của Nvidia, Jensen Huang, đã thừa nhận rằng ông đã ngoại tình, gây ra nhiều phản ứng trên mạng xã hội. Vào ngày 8 tháng 11, ông đã gửi thông điệp đến nhân viên, trong đó ông xin lỗi gia đình và nhận trách nhiệm về hành động của mình. Ông cũng cam kết hợp tác với cuộc điều tra độc lập của Nvidia liên quan đến các báo cáo cho rằng ông có thể đã trở thành mục tiêu của một chiến dịch tình báo nước ngoài.\n\nNgười phụ nữ liên quan đến vụ việc được xác định là Alice Huang, một doanh nhân có liên quan đến công ty Megaspeed, mà các quan chức tình báo Mỹ nghi ngờ có liên hệ với Trung Quốc. Jensen Huang đã gặp Alice Huang trong một số sự kiện, và mối quan hệ của họ đã bị chú ý từ tháng 10 khi thông tin bắt đầu rò rỉ ra ngoài.\n\nDưới đây là một số bài viết liên quan đến vụ việc:\n\n1. [Những dấu mốc chính quanh bê bối ngoại tình của CEO Nvidia - Báo VnExpress](https://vnexpress.net/nhung-dau-moc-chinh-quanh-be-boi-ngoai-tinh-cua-ceo-nvidia-5142619.html)\n2. [CEO JENSEN HUANG THỪA NHẬN NGOẠI TÌNH: NVIDIA ĐIỀU TRA NGHI ÁN GIÁN ĐIỆP TRUNG QUỐC - YouTube](https://www.youtube.com/watch?v=BrBnUjGudPw)\n3. [CEO Nvidia Jensen Huang thừa nhận ngoại tình: Nữ doanh nhân Alice Huang là ai? - Tuổi Trẻ Online](https://tuoitre.vn/ceo-nvidia-jensen-huang-thua-nhan-ngoai-tinh-nu-doanh-nhan-alice-huang-la-ai-100261109113347749.htm)\n4. [CEO Nvidia thừa nhận không chung thủy với vợ | VOZ](https://voz.vn/t/ceo-nvidia-thua-nhan-khong-chung-thuy-voi-vo.1296529)\n5. [CEO NVIDIA Jensen Huang: Từ người rửa bát đến đế chế chip AI và cú sốc - VietNamNet](https://vietnamnet.vn/ceo-nvidia-jensen-huang-tu-nguoi-rua-bat-den-de-che-chip-ai-va-cu-soc-2573092.html)\n\nNếu bạn cần thêm thông tin chi tiết, hãy cho tôi biết!",
+          "tool_calls": [],
+          "tool_results": []
+        }
+      ],
+      "tool_events": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "Jensen Huang ngoại tình",
+            "topic": "general",
+            "timeframe": "week",
+            "max_results": 5
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "Jensen Huang ngoại tình",
+            "topic": "general",
+            "timeframe": "week",
+            "items": [
+              {
+                "title": "Những dấu mốc chính quanh bê bối ngoại tình của CEO Nvidia - Báo VnExpress",
+                "url": "https://vnexpress.net/nhung-dau-moc-chinh-quanh-be-boi-ngoai-tinh-cua-ceo-nvidia-5142619.html",
+                "source": "vnexpress.net",
+                "summary": "Jensen Huang, CEO Nvidia, phát biểu tại Diễn đàn Kinh tế Thế giới ở Davos, Thụy Sĩ, ngày 21/1/2026. Ảnh: AP\n\n \n\nNgày 8/11, ông Jensen Huang thừa nhận đã ngoại tình, song nhấn mạnh \"tôi cam kết bảo vệ NVIDIA và hỗ trợ an ninh quốc gia của nước Mỹ\".\n\nSau lời thừa nhận của ông Huang, Nvidia thông báo hội đồng quản trị đang mở một cuộc điều tra độc lập đối với các báo cáo cho rằng CEO của họ đã trở thành mục tiêu của một chiến dịch tình báo nước ngoài. [...] Lời thừa nhận ngoại tình của CEO Nvidia Jensen Huang đã khiến mạng xã hội xôn xao, khi nhiều người dùng bày tỏ sự bất ngờ trước những tiết lộ về đời tư của tỷ phú công nghệ nổi tiếng thế giới.\n\nÔng Huang không nêu tên người phụ nữ liên quan, nhưng giới chức Mỹ đã xác định cô là Alice Huang, người mà họ nghi ngờ đang làm gián điệp cho Trung Quốc. [...] Tháng 6/2024, Alice Huang gọi điện mời Jensen Huang tham dự một bữa tiệc của lãnh đạo các công ty công nghệ trong thời gian diễn ra triển lãm công nghệ Computex 2024 tại Đài Bắc, đảo Đài Loan. Trong bức ảnh chụp sự kiện, ông chủ Nvidia mặc áo khoác da, ngồi cạnh một người phụ nữ tóc dài đeo trang sức, được cho là Alice Huang.",
+                "score": 0.87218446
+              },
+              {
+                "title": "CEO JENSEN HUANG THỪA NHẬN NGOẠI TÌNH: NVIDIA ĐIỀU TRA NGHI ÁN GIÁN ĐIỆP TRUNG QUỐC",
+                "url": "https://www.youtube.com/watch?v=BrBnUjGudPw",
+                "source": "youtube.com",
+                "summary": "Tờ New York Times đưa tin ông Jensen Huang (Hoàng Nhân Huân) có mối quan hệ mập mờ với bà Alice Huang, cựu lãnh đạo công ty Megaspeed có trụ sở tại Singapore. Vẫn theo tờ báo này, các quan chức tình báo Mỹ tin rằng nữ doanh nhân Trung Quốc Alice Huang, là gián điệp hoạt động cho Bắc Kinh.\n\nTrong một thông điệp gửi đến các nhân viên Nvidia hôm 8/11 (giờ Mỹ), CEO Jensen Huang thừa nhận đã “không chung thủy” với vợ, đồng thời xin lỗi vì đã làm tổn thương bà và các con. \n\nTruy cập website: [...] # CEO JENSEN HUANG THỪA NHẬN NGOẠI TÌNH: NVIDIA ĐIỀU TRA NGHI ÁN GIÁN ĐIỆP TRUNG QUỐC\n## Channel: BBC News Tiếng Việt (verified)\n2.42M subscribers\n\n### Description\n50,444 views\nGã khổng lồ công nghệ Mỹ Nvidia cho biết đang điều tra khả năng CEO Jensen Huang trở thành mục tiêu của một chiến dịch tình báo nước ngoài, sau khi ông thừa nhận không chung thủy với vợ. [...] Truy cập website: \n\n#BBCNewsTiengViet #JensenHuang #Nvidia #TrungQuoc #giandiep\n\n0:00 Mở đầu\n0:47 Jensen Huang là ai?\n3:00 Căng thẳng Mỹ - Trung\n4:39 Nvidia là công ty gì?\n6:17 Vợ của ông Huang là ai?\n7:27 Chúng ta biết gì về bê bối tình cảm này?\n8:37 Kết",
+                "score": 0.85008353
+              },
+              {
+                "title": "CEO Nvidia Jensen Huang thừa nhận ngoại tình: Nữ doanh nhân Alice Huang là ai? - Tuổi Trẻ Online",
+                "url": "https://tuoitre.vn/ceo-nvidia-jensen-huang-thua-nhan-ngoai-tinh-nu-doanh-nhan-alice-huang-la-ai-100261109113347749.htm",
+                "source": "tuoitre.vn",
+                "summary": "CEO Nvidia Jensen Huang và bà Alice Huang - Ảnh: NetThunder/LinkedIn\n\nNgày 8-11, tỉ phú người Mỹ gốc Đài Loan Jensen Huang (Hoàng Nhn Hun), 63 tuổi, giám đốc điều hành (CEO) Tập đoàn sản xuất chip Nvidia của Mỹ, thừa nhận với nhn viên Nvidia rằng ông đã không chung thủy với người vợ gắn bó suốt 41 năm. Ông xin lỗi gia đình và cam kết hợp tác với cuộc điều tra độc lập của Nvidia. [...] Nvidia khẳng định các cuộc gặp giữa hai người là hoạt động tiếp xúc thông thường với khách hàng. Người phát ngôn công ty nói rõ khách hàng chỉ được tiếp cận thông tin kinh doanh thông thường, không có quyền tiếp cận bí mật thương mại. Jensen Huang cũng nói với Hãng tin Bloomberg rằng những lần tương tác đều liên quan đến Megaspeed và \"hoàn toàn bình thường, không có gì bất thường\". [...] Tổng thống Donald Trump ủng hộ tỉ phú Jensen Huang tiếp tục giữ chức giám đốc điều hành Tập đoàn Nvidia của Mỹ, giữa bê bối vị CEO ngoại tình với nữ doanh nhn bị nghi làm gián điệp.\n\nĐọc tiếp  Về trang Chủ đề\n\nBÌNH AN\n\nTrở thành người đầu tiên tặng sao cho bài viết  0    0   0\n\nTặng sao cho bài viết hay\n\nChia sẻ\n\nCHIA SẺ\n\n Facebook   Mail   Twitter / X   LinkedIn\n\ngoogle Nguồn ưu tiên trên Google   Ưu tiên Tuổi Trẻ trên Google Search. Xem hướng dẫn.)\n\nTặng sao\n\nChuyển sao tặng cho thành viên",
+                "score": 0.8479807
+              },
+              {
+                "title": "CEO Nvidia thừa nhận không chung thủy với vợ | VOZ",
+                "url": "https://voz.vn/t/ceo-nvidia-thua-nhan-khong-chung-thuy-voi-vo.1296529",
+                "source": "voz.vn",
+                "summary": "Nvidia cho biết đang điều tra khả năng CEO Jensen Huang trở thành mục tiêu của một chiến dịch tình báo nước ngoài, sau khi ông thừa nhận không chung thủy với vợ.  \n   \n Ngày 8/11, theo Reuters, trong thông điệp gửi nhn viên, ông Huang nói đã ngoại tình và tuyên bố \"nhận hoàn toàn trách nhiệm\" về hành động của mình. \"Hành động của tôi làm tổn thương vợ và các con. Không có lý do nào có thể biện minh cho những gì tôi đã làm. Tôi vô cùng xin lỗi\", ông nói. [...] Jensen Huang kết hôn với Lori Huang (tên thời con gái là Lori Mills) sau khi quen nhau tại Đại học bang Oregon. Hai người gặp nhau khi ông 17 tuổi còn bà 19 tuổi và đã gắn bó hơn bốn thập kỷ. Họ có hai con, Madison và Spencer, hiện đều làm tại Nvidia. [...] Jensen Huang đi cùng Alice Huang tại một nhà hàng ở Đài Bắc năm 2025. Ảnh: Sunday Times  \n   \n Thông tin bắt đầu rộ lên vào tháng 10, khi New York Times cho biết Jensen Huang có mối quan hệ mập mờ với Alice Huang, cựu lãnh đạo Megaspeed, công ty có trụ sở tại Singapore. Đơn vị chuyên mua chip AI của Nvidia này đang bị giới chức Mỹ giám sát do nghi ngờ hỗ trợ Bắc Kinh tiếp cận chip AI tiên tiến vốn bị cấm xuất khẩu sang Trung Quốc.",
+                "score": 0.8173562
+              },
+              {
+                "title": "CEO NVIDIA Jensen Huang: Từ người rửa bát đến đế chế chip AI và cú sốc",
+                "url": "https://vietnamnet.vn/ceo-nvidia-jensen-huang-tu-nguoi-rua-bat-den-de-che-chip-ai-va-cu-soc-2573092.html",
+                "source": "vietnamnet.vn",
+                "summary": "Thêm VietNamNet trên Google\n\nCEO NVIDIA Jensen Huang thừa nhận ngoại tình, gy cú sốc cho tập đoàn chip hàng đầu thế giới. Từng rửa bát, làm bồi bàn tại Mỹ, ông đã gy dựng đế chế NVIDIA trị giá 4.500 tỷ USD và sở hữu khối tài sản ước tính hơn 162 tỷ USD.\n\n## Bê bối đời tư gy sức ép lên đế chế NVIDIA [...] CEO NVIDIA Jensen Huang ngoại tình: Tập đoàn 4.500 tỷ USD ảnh hưởng ra sao?CEO NVIDIA Jensen Huang công khai thừa nhận không chung thủy với vợ, sau khi thông tin đời tư xuất hiện trên truyền thông. Cổ phiếu NVIDIA chao đảo sau thông tin chấn động này. [...] Ngày 8/11, CEO NVIDIA Jensen Huang, 63 tuổi, thừa nhận với nhn viên tập đoàn rằng ông đã không chung thủy với người vợ Lori Huang sau hơn 41 năm chung sống. Ông gửi lời xin lỗi gia đình, thừa nhận hoàn toàn trách nhiệm về những tổn thương gy ra.\n\nTheo NYT, người phụ nữ có quan hệ tình cảm với Huang là Alice Huang (Huang Le), nữ doanh nhn Trung Quốc từng giữ vị trí lãnh đạo tại Megaspeed International, doanh nghiệp kinh doanh trung tm dữ liệu và có quan hệ thương mại với NVIDIA.",
+                "score": 0.8016413
+              }
+            ]
+          }
+        }
+      ],
+      "ended_at": "2026-11-10T12:00:36"
+    }
+  ]
+}

@@ -45,7 +45,19 @@ tools:
       required: [query]
 
   - name: lookup
-    description: "Tra cứu thông tin trên internet."
+    description: >-
+      Tìm thông tin và tin tức trên web. Dùng cho yêu cầu tìm web hoặc tin tức
+      không chỉ định mạng xã hội; không dùng để lấy bài đăng của một tài khoản,
+      tìm tweet, hay đọc nội dung của một URL đã biết.
+      Với yêu cầu tin tức, truyền rõ topic="news"; tra cứu thông thường dùng
+      topic="general". query chỉ chứa chủ đề cần tìm, không thêm từ chỉ nguồn
+      hoặc thời gian khi đã có tham số tương ứng. Truyền rõ timeframe khi user
+      yêu cầu: hôm nay/24 giờ là day, tuần là week, tháng là month, năm là year.
+      Qua nhiều lượt, giữ chủ đề, loại tin và khoảng thời gian chưa bị user thay đổi;
+      nếu user sửa chủ đề thì chỉ tìm chủ đề mới. Khi user chuyển từ Twitter sang
+      web, dùng lookup thay cho social_search và giữ các ràng buộc còn hiệu lực.
+      Nếu user yêu cầu cả web và tweet, gọi lookup cho phần web và social_search
+      cho phần tweet; không bỏ một trong hai nguồn.
     parameters:
       type: object
       properties:
@@ -123,3 +135,26 @@ tools:
         max_pages: {type: integer, default: 5, description: "Số trang"}
         max_chars: {type: integer, default: 8000, description: "Số ký tự"}
       required: [arxiv_url]
+
+  - name: deduplicate
+    description: >-
+      Lọc các nguồn trùng URL từ danh sách items đã có, giữ nguồn đầu tiên và
+      thứ tự ban đầu. Bỏ khác biệt do fragment hoặc tham số tracking utm_*,
+      fbclid, gclid khi so sánh. Dùng khi user yêu cầu loại nguồn trùng;
+      không tìm web, đọc bài hay format. Nếu chưa có items/URL thì hỏi lại qua
+      clarify, không bịa nguồn. Xử lý local, không cần mạng hoặc API key.
+    parameters:
+      type: object
+      properties:
+        items:
+          type: array
+          description: "Các nguồn user cung cấp hoặc tool đã trả về; mỗi item cần url HTTP(S), có thể kèm title/source/summary."
+          items:
+            type: object
+            properties:
+              url: {type: string, description: "URL HTTP(S) tuyệt đối của nguồn."}
+              title: {type: string}
+              source: {type: string}
+              summary: {type: string}
+            required: [url]
+      required: [items]

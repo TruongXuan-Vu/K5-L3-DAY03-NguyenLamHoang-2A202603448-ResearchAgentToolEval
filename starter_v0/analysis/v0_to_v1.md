@@ -49,3 +49,13 @@ Run: `runs/v1_B_base_openrouter_20261110T111415882369.json`.
 - `artifacts/version_log.csv` đã ghi baseline và lần thử v1, với metric sau là unavailable thay vì ghi điểm dự đoán.
 
 Cần được người dùng cho phép rõ ràng gửi prompt, tool declarations và câu hỏi eval đến OpenRouter để thử lại ngoài sandbox, hoặc người dùng tự chạy lệnh ở trên trong terminal có mạng. Sau khi có run hợp lệ mới cập nhật metric trước/sau và kết luận về R10/R11, M01/M04 cùng các case còn lại.
+
+## Cập nhật: run v1 hợp lệ do người dùng chạy
+
+Run `runs/v1_B_base_openrouter_20261110T111806972710.json` đã đo đủ 20 case, không có provider error, đạt 18/20 (90%). Routing và arguments đều 90%; multi-turn 83.33% (5/6), giảm từ 100% ở v0.
+
+R10/R11 đã PASS, M01/M04 vẫn PASS: giả thuyết hỏi lại khi thiếu dữ liệu được hỗ trợ bởi lần chạy này. R08/R13/R14 cũng chuyển sang PASS dù không có thay đổi riêng cho những lỗi đó; không kết luận chúng đã được khắc phục ổn định chỉ từ một lần chạy. R08/R14 không gọi tool nhưng vẫn trả lời bài toán/code: PASS ở đây chỉ chứng minh tiêu chí không gọi tool, không chứng minh agent đã từ chối ngoài phạm vi.
+
+Còn FAIL R12 (gọi `send` trước khi xác nhận) và M06 (gọi `social_search` dù user đã đổi sang web news). M06 là hồi quy so với v0, cần theo dõi và sửa trong vòng riêng.
+
+Đã cập nhật version log bằng điểm thực đo. Bản prompt và tools của v1 được lưu tại `artifacts/snapshots/v1/`, kiểm tra hash khớp run hợp lệ trước khi sửa v2.
