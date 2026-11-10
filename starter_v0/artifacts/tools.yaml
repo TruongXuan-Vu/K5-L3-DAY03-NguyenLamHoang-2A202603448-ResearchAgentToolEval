@@ -123,3 +123,13 @@ tools:
         max_pages: {type: integer, default: 5, description: "Số trang"}
         max_chars: {type: integer, default: 8000, description: "Số ký tự"}
       required: [arxiv_url]
+
+  - name: hn_search
+    description: "Tìm thảo luận/bài đăng về một chủ đề trên Hacker News. Dùng khi cần góc nhìn cộng đồng dev về chủ đề công nghệ; KHÔNG dùng cho tin tức chính thống (dùng lookup) hay bài đăng MXH (dùng social_search)."
+    parameters:
+      type: object
+      properties:
+        query: {type: string, default: "", description: "Từ khóa tìm kiếm"}
+        max_results: {type: integer, default: 5, description: "Số kết quả (1-20)"}
+        tags: {type: string, enum: [story, comment], default: "story", description: "Loại nội dung"}
+      required: [query]

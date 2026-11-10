@@ -110,13 +110,51 @@ def test_policy_instruction_like_lines_go_to_untrusted_text() -> None:
 #   2. bad / missing input from the model (empty string, wrong type, out-of-enum value)
 #   3. failure path (missing key, HTTP error, timeout) -> returns error dict, does not raise
 
-def test_my_new_tool_happy_path() -> None:
-    pytest.skip(TODO)
+def test_my_new_tool_happy_path(fake_http) -> None:
+    # hn_search happy path: mocked API response maps to items with expected fields.
+    calls = fake_http(FakeResponse({
+        "nbHits": 42,
+        "hits": [{
+            "title": "Show HN: My research agent",
+            "author": "alice",
+            "points": 10,
+            "num_comments": 3,
+            "objectID": "12345",
+            "url": "https://example.com/agent",
+            "created_at": "2026-01-01T00:00:00Z",
+        }],
+    }))
+    from tools import TOOL_FUNCTIONS
+    result = TOOL_FUNCTIONS["hn_search"]("research agent", max_results=2)
+
+    assert result["tool"] == "hn_search"
+    assert result["total_results"] == 42
+    assert result["items"][0]["title"] == "Show HN: My research agent"
+    assert result["items"][0]["url"] == "https://example.com/agent"
+    # Assert the request sent to the API carried the query and page size.
+    assert calls[0]["params"]["query"] == "research agent"
+    assert calls[0]["params"]["hitsPerPage"] == 2
+    assert "hn.algolia.com" in calls[0]["url"]
 
 
-def test_my_new_tool_bad_input_from_model() -> None:
-    pytest.skip(TODO)
+def test_my_new_tool_bad_input_from_model(fake_http) -> None:
+    # Empty query from the model -> error dict, no exception.
+    from tools import TOOL_FUNCTIONS
+    result = TOOL_FUNCTIONS["hn_search"]("")
+    assert result["tool"] == "hn_search"
+    assert "error" in result
+    # Out-of-range max_results is clamped to >= 1 in the request, not crashed.
+    calls = fake_http(FakeResponse({"nbHits": 0, "hits": []}))
+    clamped = TOOL_FUNCTIONS["hn_search"]("ai", max_results=0)
+    assert clamped["items"] == []
+    assert calls[0]["params"]["hitsPerPage"] == 1
 
 
-def test_my_new_tool_failure_returns_error_dict() -> None:
-    pytest.skip(TODO)
+def test_my_new_tool_failure_returns_error_dict(fake_http) -> None:
+    # HTTP 500 -> error dict returned, does not raise.
+    fake_http(FakeResponse(status_code=500))
+    from tools import TOOL_FUNCTIONS
+    result = TOOL_FUNCTIONS["hn_search"]("ai")
+    assert result["tool"] == "hn_search"
+    assert "error" in result
+    assert "message" in result
