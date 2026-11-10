@@ -186,3 +186,33 @@ tools:
         max_items: {type: integer, default: 10, description: "Số chuyện tối đa trả về"}
         similarity: {type: number, default: 0.6, description: "Ngưỡng Jaccard (0-1) để coi hai tiêu đề là cùng chuyện"}
       required: [items]
+
+  - name: recency
+    description: >-
+      Lọc và xếp các nguồn theo thời gian đăng trước khi tổng hợp bảng tin,
+      phục vụ yêu cầu dạng "tin hôm nay" hoặc "tin trong tuần này". within
+      nhận today (24 giờ qua), week (7 ngày), month (31 ngày) hoặc any (chỉ
+      xếp, mặc định); kết quả xếp mới nhất trước. Item thiếu/sai ngày hoặc có
+      ngày tương lai không bịa lại mà dồn xuống cuối và đếm vào
+      undated_count; item ngoài khung đếm vào out_of_range_count. Dùng sau
+      deduplicate và cluster_stories, trước format. Không tìm web, đọc bài hay
+      format; nếu chưa có items thì hỏi lại qua clarify, không bịa nguồn.
+      Xử lý local, không cần mạng hoặc API key.
+    parameters:
+      type: object
+      properties:
+        items:
+          type: array
+          description: "Các nguồn user cung cấp hoặc tool đã trả về; mỗi item cần trường date, có thể kèm title/url/source/summary."
+          items:
+            type: object
+            properties:
+              date: {type: string, description: "Ngày/giờ đăng: ISO 8601, RFC 822, dd/mm/yyyy hoặc unix timestamp."}
+              title: {type: string}
+              url: {type: string}
+              source: {type: string}
+              summary: {type: string}
+            required: [date]
+        within: {type: string, default: "any", description: "Khung thời gian: today, week, month hoặc any"}
+        max_items: {type: integer, default: 10, description: "Số dòng bảng tin tối đa trả về"}
+      required: [items]

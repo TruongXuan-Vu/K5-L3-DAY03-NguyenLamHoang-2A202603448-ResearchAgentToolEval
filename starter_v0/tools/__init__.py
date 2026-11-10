@@ -19,6 +19,7 @@ from .send.tool import send_telegram
 from .lookup.tool import web_search
 from .deduplicate.tool import deduplicate_sources
 from .cluster_stories.tool import cluster_stories
+from .recency.tool import sort_recency
 
 
 # NOTE (starter_v0): tool names here are intentionally vague. These keys are the
@@ -39,6 +40,7 @@ TOOL_FUNCTIONS = {
     "paper_text": get_arxiv_paper_text,
     "deduplicate": deduplicate_sources,
     "cluster_stories": cluster_stories,
+    "recency": sort_recency,
 }
 
 
