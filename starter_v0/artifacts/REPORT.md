@@ -16,33 +16,42 @@
 
 ## A1. Agent này làm được gì
 
-> 1–2 câu mô tả agent dùng để làm gì (cho team khác hiểu nhanh).
+Research Agent hỗ trợ tìm tin trên web và X/Twitter, đọc nội dung từ URL, tìm tài liệu khoa học và trình bày thông tin thành bản tin có liên kết nguồn. Agent hỏi lại khi thiếu tài khoản hoặc URL; bản v2 bổ sung quy tắc hỏi xác nhận trước khi gửi nội dung lên Telegram.
 
-Ví dụ: "Research agent: tìm tin theo từ khóa / theo tài khoản, đọc URL, tổng hợp thành digest, và gửi lên Telegram khi được xác nhận."
+**Dành cho:** người cần theo dõi tin AI/công nghệ, tổng hợp thông tin theo chủ đề và tra cứu nguồn để đọc sâu hơn.
 
 **Link dùng thử (deploy):**
 
-> Dán link public để team khác mở thử ngay. Cách deploy nhanh bằng Cloudflare Tunnel xem README. Nếu deploy Vercel/Streamlit Cloud thì dán link đó.
->
-> URL: 
+UI Streamlit đã được bổ sung tại `app.py`, hỗ trợ chat nhiều lượt, xem các lần gọi tool và tải transcript JSON. Chạy `python -m streamlit run app.py` trong thư mục `starter_v0`, sau khi cài `requirements.txt`, rồi mở **http://localhost:8501** trên máy chạy UI.
+
+**Link public cho team khác:** chưa bổ sung; cần triển khai hoặc mở Cloudflare Tunnel theo README. Hướng dẫn chạy và dùng thử: `UI-README.md`.
+
+**Lưu ý khi dùng thử:** chức năng X/Twitter và gửi Telegram cần cấu hình dịch vụ tương ứng; log hiện tại còn báo thiếu key X/Twitter. Khả năng chọn tool và lấy dữ liệu thành công được kiểm tra riêng, nên điểm eval không đồng nghĩa mọi dịch vụ đã hoạt động đầy đủ.
 
 ## A2. Tool agent có
 
-> Liệt kê các tool agent đang dùng (gồm tool mới nhóm tự thêm). Mỗi tool 1 dòng: tên + làm được gì.
-
 | Tên tool | Làm được gì | Tool mới nhóm thêm? |
 |---|---|---|
-| clarify | hỏi lại người dùng khi thiếu thông tin | không |
-|  |  |  |
-|  |  |  |
+| `clarify` | Hỏi bổ sung thông tin hoặc xin xác nhận trước khi gửi. | Không |
+| `timeline` | Lấy các bài đăng gần đây của một tài khoản X/Twitter. | Không |
+| `social_search` | Tìm bài đăng X/Twitter theo từ khóa, ưu tiên mới nhất hoặc nổi bật. | Không |
+| `lookup` | Tìm thông tin và tin tức trên web theo chủ đề, khoảng thời gian. | Không |
+| `fetch` | Đọc nội dung một URL được cung cấp. | Không |
+| `format` | Trình bày các mục thông tin đã có thành bản tin Markdown. | Không |
+| `send` | Gửi nội dung lên Telegram khi được xác nhận. | Không |
+| `policy` | Tra cứu các tài liệu chính sách nội bộ có sẵn. | Không |
+| `papers` | Tìm bài báo khoa học trên arXiv. | Không |
+| `paper_text` | Tải PDF arXiv và trích xuất nội dung văn bản. | Không |
+
+Hiện cả 10 tool đều có sẵn trong starter; nhóm chưa đăng ký tool mới.
 
 ## A3. Câu hỏi mẫu để thử
 
-> 3–5 câu hỏi/yêu cầu mẫu để team khác tự thử agent ngay.
-
-1.
-2.
-3.
+1. **Tìm tin web:** "Tìm 5 tin về AI hôm nay trên web, kèm liên kết nguồn."
+2. **Đọc bài viết:** "Đọc và tóm tắt bài viết tại https://www.anthropic.com/news/claude."
+3. **Theo dõi tài khoản:** "Lấy 5 bài đăng mới nhất của @elonmusk trên X/Twitter."
+4. **Thử hỏi lại:** "Tóm tắt 5 tweet mới nhất giúp mình." Khi agent hỏi tài khoản, trả lời: "Của @elonmusk nhé."
+5. **Thử xác nhận gửi:** "Đăng bản tin này lên Telegram giúp mình: Ba chủ đề cần theo dõi hôm nay là AI, robotics và an toàn mô hình." Quan sát agent hỏi xác nhận; có thể trả lời "Không gửi" để kết thúc bước thử.
 
 ---
 

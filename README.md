@@ -310,6 +310,18 @@ Try at least 3 live turns, for example:
 - A request thiếu thông tin (không nói rõ account/URL), rồi lượt sau bổ sung.
 - Một request "đăng/gửi bản tin lên Telegram" — quan sát agent có hành động ngay hay hỏi lại trước, rồi tự quyết định hành vi nào mới đúng và sửa prompt cho khớp.
 
+## UI Streamlit trong repo
+
+Giao diện chat ở `starter_v0/app.py` dùng cùng vòng lặp model/tool với `chat.py`, có lịch sử hội thoại, xem tool calls và tải transcript JSON. Xem [UI-README.md](starter_v0/UI-README.md) để biết cách chạy và kiểm tra.
+
+Tại `starter_v0`, sau khi cài `requirements.txt`:
+
+```powershell
+python -m streamlit run app.py
+```
+
+Mở http://localhost:8501. Đây là địa chỉ local; để team khác dùng thử, làm bước tunnel bên dưới.
+
 ## Deploy nhanh để team khác dùng thử (khuyến nghị: Cloudflare Tunnel)
 
 Để team cùng zone tự thử agent trong Team showdown, expose UI đang chạy local ra một link public. Cách nhanh nhất, không cần đăng ký domain hay deploy lên cloud, là **Cloudflare Tunnel** (`cloudflared`).
