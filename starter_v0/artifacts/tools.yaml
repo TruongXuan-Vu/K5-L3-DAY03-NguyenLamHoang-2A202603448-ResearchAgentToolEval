@@ -158,3 +158,31 @@ tools:
               summary: {type: string}
             required: [url]
       required: [items]
+
+  - name: cluster_stories
+    description: >-
+      Gộp các nguồn khác nhau đang nói về cùng một chuyện (theo độ tương đồng
+      tiêu đề, fold dấu và bỏ stopword tiếng Việt/Anh) trước khi tổng hợp bảng
+      tin đa nguồn web + X. Mỗi chuyện giữ một đại diện (item score cao nhất),
+      kèm story_count và also_from ghi các nguồn phụ. Dùng sau deduplicate vì
+      deduplicate chỉ bỏ trùng URL, tool này gộp trùng nội dung. Không tìm web,
+      đọc bài hay format. Nếu chưa có items thì hỏi lại qua clarify, không bịa
+      nguồn. Xử lý local, không cần mạng hoặc API key.
+    parameters:
+      type: object
+      properties:
+        items:
+          type: array
+          description: "Các nguồn user cung cấp hoặc tool đã trả về; mỗi item cần title, có thể kèm url/source/summary/score."
+          items:
+            type: object
+            properties:
+              title: {type: string, description: "Tiêu đề (hoặc dòng đầu của tweet) dùng để so khớp chuyện."}
+              url: {type: string}
+              source: {type: string}
+              summary: {type: string}
+              score: {type: number}
+            required: [title]
+        max_items: {type: integer, default: 10, description: "Số chuyện tối đa trả về"}
+        similarity: {type: number, default: 0.6, description: "Ngưỡng Jaccard (0-1) để coi hai tiêu đề là cùng chuyện"}
+      required: [items]
