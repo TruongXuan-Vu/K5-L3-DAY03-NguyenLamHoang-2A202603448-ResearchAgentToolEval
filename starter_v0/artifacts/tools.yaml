@@ -135,3 +135,26 @@ tools:
         max_pages: {type: integer, default: 5, description: "Số trang"}
         max_chars: {type: integer, default: 8000, description: "Số ký tự"}
       required: [arxiv_url]
+
+  - name: deduplicate
+    description: >-
+      Lọc các nguồn trùng URL từ danh sách items đã có, giữ nguồn đầu tiên và
+      thứ tự ban đầu. Bỏ khác biệt do fragment hoặc tham số tracking utm_*,
+      fbclid, gclid khi so sánh. Dùng khi user yêu cầu loại nguồn trùng;
+      không tìm web, đọc bài hay format. Nếu chưa có items/URL thì hỏi lại qua
+      clarify, không bịa nguồn. Xử lý local, không cần mạng hoặc API key.
+    parameters:
+      type: object
+      properties:
+        items:
+          type: array
+          description: "Các nguồn user cung cấp hoặc tool đã trả về; mỗi item cần url HTTP(S), có thể kèm title/source/summary."
+          items:
+            type: object
+            properties:
+              url: {type: string, description: "URL HTTP(S) tuyệt đối của nguồn."}
+              title: {type: string}
+              source: {type: string}
+              summary: {type: string}
+            required: [url]
+      required: [items]

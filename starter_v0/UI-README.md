@@ -11,14 +11,14 @@ Mở http://localhost:8501. API key đọc từ `.env` như khi chạy `chat.py`
 
 ## Dùng thử
 
-1. Chọn provider; để trống model để dùng mặc định của provider hoặc nhập model muốn dùng. Nhãn version được gợi ý từ run có prompt/tools hash khớp với các file hiện tại; nếu chưa có run khớp thì dùng `working`.
+1. Chọn version từ dropdown: v0, v1, v2, v3, v4-tools nạp đúng snapshot trong `artifacts/snapshots/`; “Bản đang sửa” nạp file hiện tại. Provider/model nằm trong “Cấu hình nâng cao”; để trống model để dùng mặc định của provider.
 2. Nhập yêu cầu hoặc chọn câu hỏi mẫu. Agent dùng cùng vòng lặp gọi tool nhiều bước với `chat.py`.
 3. Khi agent hỏi bổ sung thông tin hoặc xác nhận, trả lời trong ô chat để tiếp tục hội thoại.
 4. Mở “Xem … lần gọi tool” dưới câu trả lời để xem arguments và kết quả thực thi, bao gồm lỗi dịch vụ.
 5. Dùng “Tải transcript JSON” ở thanh bên để lấy bằng chứng. Mỗi lượt cũng tự lưu vào `transcripts/ui_<uuid>.transcript.json`; các phiên trình duyệt dùng transcript riêng.
-6. Chọn “Cuộc trò chuyện mới” để thay provider/model/version. Hội thoại trước vẫn có file transcript đã lưu; hội thoại mới không mang lịch sử cũ sang.
+6. Chọn “Cuộc trò chuyện mới” để thay provider/model. Đổi version trong dropdown tự bắt đầu hội thoại mới bằng đúng snapshot đó. Hội thoại trước vẫn có file transcript đã lưu; hội thoại mới không mang lịch sử cũ sang.
 
-Nhãn version chỉ là nhãn; prompt/tools hash trong transcript mới xác định chính xác bộ artifacts. Giao diện giữ bản prompt/tools đã nạp trong suốt cuộc trò chuyện. Sau khi sửa artifacts, bắt đầu cuộc trò chuyện mới để dùng bản sửa.
+Dropdown version chọn nội dung prompt/tools thực tế, không chỉ đổi nhãn log. Transcript lưu đường dẫn snapshot cùng hash để kiểm chứng. Giao diện giữ bản prompt/tools đã nạp trong suốt cuộc trò chuyện. Sau khi sửa artifacts, chọn “Bản đang sửa” và bắt đầu cuộc trò chuyện mới để dùng bản sửa; snapshot cũ không bị ghi đè.
 
 ## Kiểm tra không tốn API
 
